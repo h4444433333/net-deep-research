@@ -57,60 +57,10 @@
 
 ## 30 秒安装
 
-### 1. 首选 ClawHub 安装入口
-
-先打开：
+从 ClawHub 安装：
 
 - [ClawHub 技能页](https://clawhub.ai/h4444433333/skills/net-deep-research)
 - [ClawHub 版本页](https://clawhub.ai/h4444433333/skills/net-deep-research#versions)
-
-如果你的宿主本身支持 ClawHub 原生安装，就优先走这条路。
-
-### 2. 让宿主按当前平台自动安装
-
-把下面这段提示词直接丢给你的宿主：
-
-```text
-请根据我当前的平台，帮我安装 Net Deep Research。
-
-优先来源：
-https://clawhub.ai/h4444433333/skills/net-deep-research
-
-要求：
-1. 自动识别这个宿主正确的本地 skill 目录
-2. 保持整个 bundle 目录结构不变
-3. 保留 SKILL.md、_meta.json、skill-card.md 和 tools/ 的相对位置
-4. 安装完成后告诉我正确触发命令
-```
-
-如果宿主需要显式选版本，就用这个版本页提示：
-
-```text
-请从这个 ClawHub 版本页安装 Net Deep Research，并为我选择适合当前宿主的最新稳定版本：
-https://clawhub.ai/h4444433333/skills/net-deep-research#versions
-```
-
-### 3. 如果前两种方式不工作，再让宿主安装你已下载的 Skill 包
-
-如果宿主对 ClawHub 支持不好，先把这个 skill bundle 下载到本地，再把下面这段提示词丢给宿主：
-
-```text
-我已经把 Net Deep Research 的 skill 包下载到本地了。
-请根据我当前使用的平台，把这个本地 SKILL.md bundle 安装到正确的 skill 目录。
-
-要求：
-1. 自动识别这个宿主正确的 skill 安装目录
-2. 保留 SKILL.md、_meta.json、skill-card.md 和 tools/ 的相对位置
-3. 不要打平目录结构
-4. 安装后告诉我应该如何触发这个 skill
-```
-
-### 安装说明
-
-- `SKILL.md` 必须留在 bundle 根目录
-- `tools/` 子目录必须和 `SKILL.md` 同级保留
-- 优先用 ClawHub 做安装和版本发现
-- 如果前两种方式不工作，再让宿主安装你已经下载到本地的 skill 包
 
 ## 快速开始
 
@@ -217,14 +167,3 @@ net-deep-research-github-1.0.4/
 - 官方政策查询
 - 实现路径调研
 - 需要信源支撑的回答生成
-
-## 开源发布说明
-
-这个文件夹已经按独立公开包做了整理。如果你要发布到 GitHub，只需要公开这个目录中的内容即可。
-
-## GitHub x ClawHub 联动
-
-- GitHub 负责公开源码与 bundle 内容
-- ClawHub 负责分发入口与版本发现
-- 如果你先看到 GitHub，建议去 ClawHub 选择版本
-- 如果你先看到 ClawHub，但宿主更偏好 GitHub bundle，就回到本仓库安装

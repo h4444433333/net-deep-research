@@ -52,60 +52,10 @@ This repository is especially relevant if you are looking for:
 
 ## 30-Second Install
 
-### 1. Install from ClawHub First
-
-Open:
+Install from ClawHub:
 
 - [ClawHub skill page](https://clawhub.ai/h4444433333/skills/net-deep-research)
 - [ClawHub versions page](https://clawhub.ai/h4444433333/skills/net-deep-research#versions)
-
-If your host already supports ClawHub-native install, use that path first.
-
-### 2. Ask Your Host To Install It For The Current Platform
-
-Paste this into your host:
-
-```text
-Please install Net Deep Research for my current platform.
-
-Preferred source:
-https://clawhub.ai/h4444433333/skills/net-deep-research
-
-Requirements:
-1. Detect the correct local skill directory for this host automatically.
-2. Keep the bundle structure unchanged.
-3. Preserve SKILL.md, _meta.json, skill-card.md, and tools/ together.
-4. Tell me the exact trigger command after installation.
-```
-
-Or use the versions page if your host needs explicit version selection:
-
-```text
-Install Net Deep Research from this ClawHub versions page and pick the latest stable version that fits my host:
-https://clawhub.ai/h4444433333/skills/net-deep-research#versions
-```
-
-### 3. If The First Two Paths Fail, Ask Your Host To Install The Downloaded Skill Bundle
-
-If your host does not support ClawHub well, first download the skill bundle locally, then paste this into your host:
-
-```text
-I have already downloaded the Net Deep Research skill bundle locally.
-Please install this local SKILL.md bundle into the correct skill directory for my current platform.
-
-Requirements:
-1. Detect the correct skill directory for this host automatically.
-2. Keep SKILL.md, _meta.json, skill-card.md, and tools/ together.
-3. Do not flatten the folder structure.
-4. Tell me the exact trigger command after installation.
-```
-
-### Notes
-
-- Do not move `SKILL.md` out of the bundle root.
-- Keep the `tools/` subfolder next to `SKILL.md`.
-- Prefer ClawHub for install and version discovery.
-- If the first two paths fail, ask your host to install the skill bundle you already downloaded locally.
 
 ## Quick Start
 
@@ -211,14 +161,3 @@ net-deep-research-github-1.0.4/
 - official policy lookup
 - implementation-path research
 - source-backed answer generation
-
-## Open-Source Publishing Note
-
-This folder is prepared as a standalone public bundle. If you publish it to GitHub, only the contents inside this folder need to be included.
-
-## GitHub x ClawHub
-
-- GitHub is the bundle source and public code surface.
-- ClawHub is the distribution and version discovery surface.
-- If you land on GitHub first, use the ClawHub page above for version selection.
-- If you land on ClawHub first, use this repository when your host wants a GitHub-style bundle source.
