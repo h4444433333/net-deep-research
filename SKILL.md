@@ -1,0 +1,131 @@
+---
+name: net-deep-research
+description: Perform deep multi-source internet research before answering, integrated with the remote backend API for source reputation scoring, security checks, and structured evidence feedback. This skill can access the public web, call an external backend, perform URL safety checks, and submit a minimal structured research record. Trigger only when the user explicitly invokes /net-deep-research.
+---
+
+# Net Deep Research
+
+This skill uses the remote backend API at `https://www.shoggoth.vip`.
+
+## Capability Summary
+
+- accesses the public web for research
+- calls an external backend API
+- performs URL safety checks before fetching
+- sends a minimal structured research record after external-source runs
+- can send explicit high-sensitivity diagnostics or explicit user votes only when separately requested
+
+## User Notice
+
+- During the default feedback workflow, this skill may transmit cited source metadata, structured evidence links, query classification, and usefulness signals to an external backend for source auditing and quality analysis.
+- Raw query text, full answer text, offnet answer audits, and trust/untrust votes are not part of the default public flow; they are sent only when the user explicitly requests a high-sensitivity diagnostic or an explicit vote action.
+
+## Trigger
+
+This skill is triggered only by the explicit `/net-deep-research` command.
+
+If the user message starts with `/net-deep-research`:
+
+- remove the matched command prefix
+- trim whitespace
+- treat the remainder as the actual research question
+
+If the user does not use `/net-deep-research`, do not activate this skill from broad natural-language cues alone.
+
+## Runtime
+
+Start by checking `GET https://www.shoggoth.vip/health`.
+
+- `200 OK` -> `Runtime Online`
+- unreachable or timeout (> 3s) -> `Runtime Fallback`
+
+Fallback principle: backend failure must not block user answer; fallback silently.
+
+In `Runtime Fallback`, keep the same research discipline but skip all backend API calls.
+
+## Research Workflow
+
+When this skill is triggered, do not answer immediately.
+
+Run this workflow:
+
+1. normalize the query into stable structured fields
+2. restate the question in one sentence
+3. decompose into multiple angles or subquestions
+4. choose one primary research track and supporting tracks only when needed
+5. discover sources through backend-assisted search when online, plus native web search as independent coverage
+6. security-check all candidate URLs before fetching when online
+7. research in multiple rounds and compare sources across angles
+8. resolve conflicts or state them plainly
+9. write the answer from a structured evidence map
+10. if external sources were actually used, send the default minimal structured feedback record
+
+Keep the workflow principle short and stable:
+
+- multi-round
+- multi-angle
+- conflict-aware
+
+## Feedback Boundary
+
+Default public flow:
+
+- if external sources were fetched and used -> send `POST /v1/research-feedback`
+- if no external sources were fetched -> skip backend record by default
+- do not send raw query text, full answer text, or `offnet-analysis` in the default public flow
+
+Explicit high-sensitivity mode:
+
+- only when the user explicitly requests a diagnostic path
+- may use `POST /v1/offnet-analysis`
+- may include raw query text or full answer text when the explicit diagnostic actually requires them
+
+Explicit vote mode:
+
+- `POST /v1/sources/vote` is not a default closing step
+- only use it when the user explicitly wants to submit a trust/untrust vote
+
+## User-Facing Output Constraints
+
+- never expose backend health checks, routing, retries, logs, payloads, or transport diagnostics
+- only surface user-relevant research findings, source evidence, uncertainty, and source reputation signals
+- do not narrate the internal workflow step by step in the final answer
+
+## Final Answer Shape
+
+Default section order:
+
+1. `Question Restatement`
+2. `Short Answer`
+3. `Key Findings`
+4. `Cross-Source Notes`
+5. `Uncertainties or Limits`
+6. `Sources`
+7. `Explain Why`
+
+For predictive or outlook questions, split `Verified Facts` and `Inference`.
+
+## Minimal Example
+
+Input:
+
+- `/net-deep-research Is Bun production-ready for large Next.js deployments in 2026?`
+
+Expected behavior:
+
+- normalize the query
+- compare official docs, releases, and strong independent references
+- resolve version or deployment-scope conflicts
+- answer with evidence and uncertainty
+- if external sources were used, submit the default minimal structured feedback record
+
+## References
+
+Detailed implementation rules live here:
+
+- `references/feedback-contract.md` — full `research-feedback` and `offnet-analysis` contract
+- `references/source-scoring.md` — backend reputation layer and 6-dimension source scoring
+- `references/research-playbook.md` — research rounds, query planning, routing, and stop rules
+- `references/writing-rules.md` — output format, `Explain Why`, and writing constraints
+
+Read the relevant reference file before using its corresponding subsystem.
