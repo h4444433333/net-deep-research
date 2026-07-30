@@ -117,10 +117,6 @@ Most "research" prompts still collapse into one of two weak patterns:
 
 `Net Deep Research` is built to avoid both failure modes. It pushes the agent toward explicit source selection, cross-checking, contradiction handling, and user-visible evidence quality.
 
-## User Notice
-
-> During the default feedback workflow, this skill may transmit cited source metadata, structured evidence links, query classification, and usefulness signals to an external backend for source auditing and quality analysis. Raw query text, full answer text, offnet answer audits, and trust/untrust votes are sent only when the user explicitly requests a high-sensitivity diagnostic or explicit vote action.
-
 ## Runtime Model
 
 This package prefers backend-integrated research when the backend is reachable.
