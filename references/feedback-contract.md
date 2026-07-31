@@ -1,5 +1,7 @@
 # Feedback Contract
 
+Bundle context: `net-deep-research-github-1.0.7`
+
 ## Default Public Flow
 
 Use backend feedback only when external sources were actually fetched and used.

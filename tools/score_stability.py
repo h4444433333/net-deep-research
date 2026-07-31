@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""URL stability scorer for net-deep-research skill.
+"""URL stability scorer for net-deep-research skill bundle v1.0.7.
 
 Scores a URL's link-rot probability (0-2) purely from its structure.
 Requires Python 3.7+. No dependencies beyond stdlib.
