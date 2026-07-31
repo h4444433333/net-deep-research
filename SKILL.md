@@ -5,6 +5,8 @@ description: Perform deep multi-source internet research before answering, integ
 
 # Net Deep Research
 
+Bundle version: `1.0.7`
+
 This skill uses the remote backend API at `https://www.shoggoth.vip`.
 
 ## Capability Summary
