@@ -50,14 +50,33 @@ This repository is especially relevant if you are looking for:
 - framework comparison assistant
 - backend-assisted research pipeline
 
-## 30-Second Install
-
-Install from ClawHub:
-
-- [ClawHub skill page](https://clawhub.ai/h4444433333/skills/net-deep-research)
-- [ClawHub versions page](https://clawhub.ai/h4444433333/skills/net-deep-research#versions)
-
 ## Quick Start
+
+### 1. Install
+
+Preferred:
+
+- Install from [ClawHub skill page](https://clawhub.ai/h4444433333/skills/net-deep-research)
+- Or pick a specific build from [ClawHub versions page](https://clawhub.ai/h4444433333/skills/net-deep-research#versions)
+
+LLM-assisted install:
+
+- Ask your LLM host to find this GitHub repository and install the skill bundle from `net-deep-research-github-1.0.7/`
+- Or download this repository locally and ask your LLM host to install the local bundle from `net-deep-research-github-1.0.7/`
+
+Prompt for online install:
+
+```text
+Please read the GitHub repository https://github.com/h4444433333/net-deep-research online, find the directory net-deep-research-github-1.0.7/, and install this skill bundle into the skill directory supported by your current host. After installation, tell me the install path and verify that /net-deep-research can be triggered.
+```
+
+Prompt for local install:
+
+```text
+I have already downloaded net-deep-research-github-1.0.7/ locally. Please install this local skill bundle into the skill directory supported by your current host. After installation, tell me the install path and verify that /net-deep-research can be triggered.
+```
+
+### 2. Use
 
 Trigger the skill with:
 
@@ -141,7 +160,7 @@ python3 tools/score_stability.py --json https://docs.python.org/3/
 ## Repository Layout
 
 ```text
-net-deep-research-github-1.0.4/
+net-deep-research-github-1.0.7/
 ├── README.md
 ├── SKILL.md
 ├── _meta.json

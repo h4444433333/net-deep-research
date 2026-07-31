@@ -55,14 +55,33 @@
 - 框架 / 工具对比调研
 - 有后端辅助的研究型 skill
 
-## 30 秒安装
-
-从 ClawHub 安装：
-
-- [ClawHub 技能页](https://clawhub.ai/h4444433333/skills/net-deep-research)
-- [ClawHub 版本页](https://clawhub.ai/h4444433333/skills/net-deep-research#versions)
-
 ## 快速开始
+
+### 1. 安装
+
+首选：
+
+- 从 [ClawHub 技能页](https://clawhub.ai/h4444433333/skills/net-deep-research) 安装
+- 或从 [ClawHub 版本页](https://clawhub.ai/h4444433333/skills/net-deep-research#versions) 选择指定版本
+
+LLM 安装：
+
+- 让你的 LLM 宿主直接在线读取这个 GitHub 仓库，并从 `net-deep-research-github-1.0.7/` 安装 skill bundle
+- 或先把本仓库下载到本地，再让你的 LLM 宿主从 `net-deep-research-github-1.0.7/` 安装本地 bundle
+
+在线安装提示词：
+
+```text
+请直接在线读取 GitHub 仓库 https://github.com/h4444433333/net-deep-research ，找到目录 net-deep-research-github-1.0.7/ ，并把这个 skill bundle 安装到你当前宿主支持的 skill 目录中。安装完成后告诉我安装位置，并验证 /net-deep-research 是否可触发。
+```
+
+本地安装提示词：
+
+```text
+我已经把 net-deep-research-github-1.0.7/ 下载到本地。请从这个本地目录安装 skill bundle 到你当前宿主支持的 skill 目录中。安装完成后告诉我安装位置，并验证 /net-deep-research 是否可触发。
+```
+
+### 2. 使用
 
 使用下面方式触发技能：
 
@@ -146,7 +165,7 @@ python3 tools/score_stability.py --json https://docs.python.org/3/
 ## 目录结构
 
 ```text
-net-deep-research-github-1.0.4/
+net-deep-research-github-1.0.7/
 ├── README.md
 ├── README.zh-CN.md
 ├── SKILL.md
