@@ -1,59 +1,59 @@
 # Net Deep Research
 
 [![Skill Bundle](https://img.shields.io/badge/skill-backend--integrated-blue)](./SKILL.md)
-[![Public Web Research](https://img.shields.io/badge/research-multi--source-0a7ea4)](./SKILL.md)
+[![Source-Aware Research](https://img.shields.io/badge/research-source--aware-0a7ea4)](./SKILL.md)
 [![URL Safety Checks](<https://img.shields.io/badge/safety-url%20checks-22863a>)](./SKILL.md)
-[![Feedback Loop](https://img.shields.io/badge/feedback-structured-orange)](./SKILL.md)
-[![Python Stdlib](<https://img.shields.io/badge/tooling-python%20stdlib-3776ab>)](./tools/score_stability.py)
+[![Evidence Feedback](https://img.shields.io/badge/evidence-structured-orange)](./SKILL.md)
 [![ClawHub](<https://img.shields.io/badge/ClawHub-Net%20Deep%20Research-7c3aed>)](https://clawhub.ai/h4444433333/skills/net-deep-research)
 [![Versions](https://img.shields.io/badge/ClawHub-Versions-111827)](https://clawhub.ai/h4444433333/skills/net-deep-research#versions)
 
-## 给 AI 智能体的深度调研技能：更强信源、更强引用、更强判断力
+## 给 AI 智能体的深度调研技能：不只会搜，而是会拿证据说话
 
-`Net Deep Research` 是一个后端辅助的深度调研 skill，面向需要联网检索、谨慎选源、先组织证据再输出答案的 AI 智能体。它把实时网页调研、信源信誉判断、URL 安全检查和结构化证据反馈放进同一条链路里，让回答不只是更快，而是更稳、更可审计、更容易让人信服。
+`Net Deep Research` 是一个公开的深度调研 skill bundle，面向那些必须先联网检索、比较多源、过滤风险链接、再按证据组织答案的 AI 智能体。它不是普通“会搜索的提示词”，而是一条更强调信源、交叉核验和可解释性的研究链路。
 
-如果你在找这些东西，这个仓库就是对应的公开 bundle：
+如果你在找这些东西，这个仓库就是对应的公开包：
 
 - AI 深度调研 skill
 - 智能体联网研究工具
-- RAG 引用增强助手
-- 有信源判断能力的研究工作流
-- 面向 LLM 的结构化证据检索能力
+- 带 citation 意识的 RAG 研究工作流
+- 有信源判断能力的 LLM 调研能力
 
-技能页面：
+最适合：
+
+- 官方政策查询
+- 框架 / 工具对比
+- 最新信息核验
+- 需要引文和证据链的研究问题
+- 容易被弱信源带偏的问题
+
+安装入口：
 
 - [ClawHub - Net Deep Research](https://clawhub.ai/h4444433333/skills/net-deep-research)
 - [ClawHub - 版本列表](https://clawhub.ai/h4444433333/skills/net-deep-research#versions)
 
-### 为什么值得用
+### 为什么别人会试它
 
-- 🔎 **实时多源调研**，不是一次性拍脑袋回答
-- 🛡️ **URL 安全检查**，抓取前先做风险过滤
-- 📚 **后端辅助信源信誉判断**，让选源更稳
-- 🧭 **结构化回答流程**，强调证据优先
-- 🔁 **交叉验证**，每次回答后都能交叉验证
-- ⚡ 展示支撑证据，让回答可溯源，会提供支撑证据与原因让用户决定是否采纳回答
-
-## 它到底解决什么问题
-
-`Net Deep Research` 主要帮智能体做这几件事：
-
-- 回答前先做实时联网检索
-- 不迷信单一网页，而是多源对照
+- 实时多源调研，不是一轮搜索后强行总结
+- 先看信源，再写答案
 - 抓取前先做 URL 风险过滤
-- 在最终答案背后保留结构化证据图
-- 记录最小化公开研究痕迹，用于信誉与质量分析
+- 已验证事实和推断分得更清楚
+- 遇到冲突信息不会硬编成一个结论
 
-## 最适合的搜索意图
+### 为什么它和普通联网搜索不一样
 
-这个仓库尤其适合这些需求：
+很多所谓 research prompt 最后还是两种弱模式：
 
-- AI 深度调研
-- 智能体联网搜索
-- 带引用的 RAG 检索
-- 政策 / 官方口径查询
-- 框架 / 工具对比调研
-- 有后端辅助的研究型 skill
+- 只看前几条结果，然后自信总结
+- 看了很多网页，但没有留下可用证据结构
+
+`Net Deep Research` 的目标就是避开这两种问题。它更强调多轮调研、多角度拆解、交叉核验和证据优先。
+
+### 示例问题
+
+- Bun 现在适不适合大规模 Next.js 生产部署？
+- 北京今年个人社保缴纳政策的官方口径是什么？
+- 哪些 RAG 评测框架更适合做 citation faithfulness？
+- 一个政策或技术结论现在到底是“已验证事实”还是“高概率推断”？
 
 ## 快速开始
 

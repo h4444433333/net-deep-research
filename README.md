@@ -1,54 +1,54 @@
 # Net Deep Research
 
 [![Skill Bundle](https://img.shields.io/badge/skill-backend--integrated-blue)](./SKILL.md)
-[![Public Web Research](https://img.shields.io/badge/research-multi--source-0a7ea4)](./SKILL.md)
+[![Source-Aware Research](https://img.shields.io/badge/research-source--aware-0a7ea4)](./SKILL.md)
 [![URL Safety Checks](<https://img.shields.io/badge/safety-url%20checks-22863a>)](./SKILL.md)
-[![Feedback Loop](https://img.shields.io/badge/feedback-structured-orange)](./SKILL.md)
-[![Python Stdlib](<https://img.shields.io/badge/tooling-python%20stdlib-3776ab>)](./tools/score_stability.py)
+[![Evidence Feedback](https://img.shields.io/badge/evidence-structured-orange)](./SKILL.md)
 [![ClawHub](<https://img.shields.io/badge/ClawHub-Net%20Deep%20Research-7c3aed>)](https://clawhub.ai/h4444433333/skills/net-deep-research)
 [![Versions](https://img.shields.io/badge/ClawHub-Versions-111827)](https://clawhub.ai/h4444433333/skills/net-deep-research#versions)
 
-## Deep Research For AI Agents That Need Better Sources, Better Citations, And Better Judgment.
+## Deep Research Skill For AI Agents That Need Evidence, Not Just Browsing.
 
-`Net Deep Research` is a backend-assisted deep research skill for AI agents. It combines live web research, source reputation checks, URL safety checks, and structured evidence feedback so answers are not just fast, but grounded, auditable, and easier to trust.
+`Net Deep Research` is a public skill bundle for AI agents that must search the live web, compare multiple sources, filter risky URLs, and answer from a structured evidence trail. It is built for research questions where being grounded matters more than being fast.
 
-If you are searching for an **AI deep research skill**, **web research agent skill**, **RAG citation helper**, or a **source-aware research workflow for LLMs**, this repository is the public bundle for that use case.
+If you are looking for an **AI deep research skill**, a **web research agent**, a **citation-aware RAG workflow**, or a **source-verified research bundle for LLMs**, this repository is the public package for that job.
 
-Live skill page:
+Best fit:
+
+- official policy lookup
+- framework and tool comparison
+- latest-information verification
+- citation-sensitive research
+- questions where weak sources can ruin the answer
+
+Install from:
 
 - [ClawHub - Net Deep Research](https://clawhub.ai/h4444433333/skills/net-deep-research)
 - [ClawHub - Versions](https://clawhub.ai/h4444433333/skills/net-deep-research#versions)
 
-### Why This Is Worth Using
+### Why People Try It
 
-- 🔎 **Live multi-source research** instead of one-shot guessing
-- 🛡️ **URL safety checks before fetch** so risky links are filtered early
-- 📚 **Source reputation support** to reduce weak-source answers
-- 🧭 **Evidence-first answer structure** that separates findings from inference
-- 🔁 **Cross-source verification** for conflict handling and uncertainty control
-- ⚡ **Traceable support** so users can see why an answer should or should not be trusted
+- live multi-source research instead of one-shot guessing
+- source-aware selection instead of trusting the first page
+- URL safety checks before fetch
+- clearer separation between verified facts and inference
+- conflict-aware output instead of fake certainty
 
-## What It Actually Does
+### Why It Stands Out
 
-`Net Deep Research` helps agents:
+Most "research" prompts still fail in one of two ways:
 
-- search the live web before answering
-- compare multiple sources instead of trusting a single page
-- apply safer URL checks before fetch
-- keep a structured evidence map behind the final answer
-- record a minimal public research trace for reputation and quality analysis
+- they summarize the first few pages and sound confident
+- they browse more, but leave no usable evidence structure behind
 
-## Best Fit Searches
+`Net Deep Research` is designed to avoid both. It pushes the agent toward multi-round, multi-angle, conflict-aware, evidence-first research.
 
-This repository is especially relevant if you are looking for:
+### Example Questions
 
-- deep research for AI agents
-- AI web research skill
-- source-verified LLM research workflow
-- citation-aware RAG assistant
-- public policy research skill
-- framework comparison assistant
-- backend-assisted research pipeline
+- Is Bun production-ready for large Next.js deployments?
+- What is the official Beijing individual social insurance contribution policy this year?
+- Which RAG evaluation frameworks are strongest on citation faithfulness?
+- What changed in the latest policy draft, and what is still unverified?
 
 ## Quick Start
 
@@ -126,15 +126,6 @@ If installation succeeded but the host does not auto-route by intent, explicitly
 - ✅ stronger handling of uncertainty and conflict
 - ✅ cleaner behavior when backend infrastructure partially degrades
 - ✅ reusable skill package format for local or hosted agent environments
-
-## Why It Stands Out
-
-Most "research" prompts still collapse into one of two weak patterns:
-
-- summarize the first few pages and sound confident
-- browse a lot, but leave no usable evidence structure behind
-
-`Net Deep Research` is built to avoid both failure modes. It pushes the agent toward explicit source selection, cross-checking, contradiction handling, and user-visible evidence quality.
 
 ## Runtime Model
 
