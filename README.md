@@ -7,11 +7,11 @@
 [![ClawHub](<https://img.shields.io/badge/ClawHub-Net%20Deep%20Research-7c3aed>)](https://clawhub.ai/h4444433333/skills/net-deep-research)
 [![Versions](https://img.shields.io/badge/ClawHub-Versions-111827)](https://clawhub.ai/h4444433333/skills/net-deep-research#versions)
 
-## Deep Research Skill For AI Agents That Need Evidence, Not Just Browsing.
+## A Trustworthy Research Skill For AI Agents That Need More Reliable Answers, Not Just More Search.
 
-`Net Deep Research` is a public skill bundle for AI agents that must search the live web, compare multiple sources, filter risky URLs, and answer from a structured evidence trail. It is built for research questions where being grounded matters more than being fast.
+`Net Deep Research` is a public skill bundle for AI agents that need to verify information on the live web, detect weak or misleading sources, and produce more reliable answers from evidence. It is not built to "search deeper" for its own sake. It is built to reduce the chance of being led astray by a single page, fake data, or unverified claims.
 
-If you are looking for an **AI deep research skill**, a **web research agent**, a **citation-aware RAG workflow**, or a **source-verified research bundle for LLMs**, this repository is the public package for that job.
+If you are looking for a **reliability-first research skill**, a **source-verification agent**, a **citation-aware RAG validation workflow**, or a **research bundle for LLMs that prioritizes trustworthy output**, this repository is the public package for that job.
 
 Best fit:
 
@@ -28,9 +28,10 @@ Install from:
 
 ### Why People Try It
 
-- live multi-source research instead of one-shot guessing
+- not just more search, but better filtering of what should not be trusted
 - source-aware selection instead of trusting the first page
 - URL safety checks before fetch
+- cross-checking before commitment
 - clearer separation between verified facts and inference
 - conflict-aware output instead of fake certainty
 
@@ -41,7 +42,23 @@ Most "research" prompts still fail in one of two ways:
 - they summarize the first few pages and sound confident
 - they browse more, but leave no usable evidence structure behind
 
-`Net Deep Research` is designed to avoid both. It pushes the agent toward multi-round, multi-angle, conflict-aware, evidence-first research.
+`Net Deep Research` is designed to avoid both. Its design goal is not "deeper search" as a vanity metric. Its design goal is to catch weak evidence, reduce fake-data drift, and give the user a conclusion that is easier to inspect and trust.
+
+### A More Concrete Example
+
+For example, suppose the user asks: `What is ego lite?`
+
+Without it, the answer often looks like this:
+
+- it guesses from the wording and treats it as some generic "lite" edition of Ego
+- it does not first verify whether it is a model, a product, a browser, or something else
+- the prose sounds smooth, but the sourcing is too thin to trust confidently
+
+With it, the intended behavior is closer to:
+
+- first resolve what concrete product `ego lite` actually refers to in context
+- then cross-check the claim across the official site, README, GitHub, and other strong sources instead of letting one page decide
+- finally separate conclusion, evidence, and uncertainty so the user can see what is verified and what is still inference
 
 ### Questions You Can Ask
 
@@ -115,9 +132,8 @@ If installation succeeded but the host does not auto-route by intent, explicitly
 - 🧪 queries an external backend for source reputation support
 - 🛡️ performs URL safety checks before fetching
 - 🧱 organizes findings into a structured research workflow
-- 📝 sends a minimal structured research record after external-source runs
-- 🧭 allows explicit high-sensitivity diagnostics or explicit user votes only when separately requested
-- 🔄 falls back to base research mode when backend services are down
+- 🔍 cross-checks key claims instead of trusting a single page
+- 🧾 makes the evidence behind the conclusion easier to inspect instead of giving an answer that only sounds plausible
 
 ### Included Files
 
