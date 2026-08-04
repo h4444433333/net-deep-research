@@ -43,7 +43,7 @@ Most "research" prompts still fail in one of two ways:
 
 `Net Deep Research` is designed to avoid both. It pushes the agent toward multi-round, multi-angle, conflict-aware, evidence-first research.
 
-### Example Questions
+### Questions You Can Ask
 
 - Is Bun production-ready for large Next.js deployments?
 - What is the official Beijing individual social insurance contribution policy this year?
@@ -56,27 +56,34 @@ Most "research" prompts still fail in one of two ways:
 
 Preferred:
 
-- Install from [ClawHub skill page](https://clawhub.ai/h4444433333/skills/net-deep-research)
-- Or pick a specific build from [ClawHub versions page](https://clawhub.ai/h4444433333/skills/net-deep-research#versions)
+- Install from the [ClawHub skill page](https://clawhub.ai/h4444433333/skills/net-deep-research)
+- Or pick a specific build from the [ClawHub versions page](https://clawhub.ai/h4444433333/skills/net-deep-research#versions)
 
-LLM-assisted install:
-
-- Ask your LLM host to find this GitHub repository and install the skill bundle from `net-deep-research-github-1.0.7/`
-- Or download this repository locally and ask your LLM host to install the local bundle from `net-deep-research-github-1.0.7/`
+If you use Trae, OpenCode, Claude Code, Codex, Cursor, or OpenClaw, the two LLM-assisted methods below are usually the fastest path. Just send the corresponding prompt to the model and let it handle the installation.
 
 Prompt for online install:
 
 ```text
-Please read the GitHub repository https://github.com/h4444433333/net-deep-research online, find the directory net-deep-research-github-1.0.7/, and install this skill bundle into the skill directory supported by your current host. After installation, tell me the install path and verify that /net-deep-research can be triggered.
+Please read the GitHub repository https://github.com/h4444433333/net-deep-research from the current repository root, and install the bundle formed by SKILL.md, _meta.json, skill-card.md, references/, and tools/ into the skill directory supported by your current host. If your host does not support direct GitHub installation, say that clearly and tell me which installation method it does support. After installation, tell me the install path and whether the host needs a restart or reload.
 ```
 
 Prompt for local install:
 
 ```text
-I have already downloaded net-deep-research-github-1.0.7/ locally. Please install this local skill bundle into the skill directory supported by your current host. After installation, tell me the install path and verify that /net-deep-research can be triggered.
+I have already downloaded this skill bundle to /absolute/path/to/net-deep-research-github-1.0.7. Please install SKILL.md and its related files from that local directory into the skill directory supported by your current host. If your host does not support local-directory installation, say that clearly and tell me which installation method it does support. After installation, tell me the install path and whether the host needs a restart or reload.
 ```
 
-### 2. Use
+### 2. Reload And Verify
+
+Some hosts need a restart, a skill index refresh, or a new session after installing or updating a skill.
+
+Verify with:
+
+```text
+/net-deep-research your question here
+```
+
+### 3. Use
 
 Trigger the skill with:
 
@@ -124,29 +131,8 @@ If installation succeeded but the host does not auto-route by intent, explicitly
 - ✅ better source discipline
 - ✅ clearer separation between verified facts and inference
 - ✅ stronger handling of uncertainty and conflict
-- ✅ cleaner behavior when backend infrastructure partially degrades
+- ✅ cross-checking makes conclusions less likely to be skewed by a single source
 - ✅ reusable skill package format for local or hosted agent environments
-
-## Runtime Model
-
-This package prefers backend-integrated research when the backend is reachable.
-
-When it is not:
-
-- the run stays usable
-- research continues in fallback mode
-- backend status is kept out of user-facing output
-
-## Included Helper Tool
-
-`tools/score_stability.py` is a lightweight Python utility that scores a URL's structural stability using only the Python standard library.
-
-Example:
-
-```bash
-python3 tools/score_stability.py https://github.com/example/repo
-python3 tools/score_stability.py --json https://docs.python.org/3/
-```
 
 ## Repository Layout
 
@@ -155,6 +141,7 @@ net-deep-research-github-1.0.7/
 ├── README.md
 ├── SKILL.md
 ├── _meta.json
+├── references/
 ├── skill-card.md
 └── tools/
     └── score_stability.py

@@ -48,7 +48,7 @@
 
 `Net Deep Research` 的目标就是避开这两种问题。它更强调多轮调研、多角度拆解、交叉核验和证据优先。
 
-### 示例问题
+### 你可以直接这样问
 
 - Bun 现在适不适合大规模 Next.js 生产部署？
 - 北京今年个人社保缴纳政策的官方口径是什么？
@@ -64,24 +64,31 @@
 - 从 [ClawHub 技能页](https://clawhub.ai/h4444433333/skills/net-deep-research) 安装
 - 或从 [ClawHub 版本页](https://clawhub.ai/h4444433333/skills/net-deep-research#versions) 选择指定版本
 
-LLM 安装：
-
-- 让你的 LLM 宿主直接在线读取这个 GitHub 仓库，并从 `net-deep-research-github-1.0.7/` 安装 skill bundle
-- 或先把本仓库下载到本地，再让你的 LLM 宿主从 `net-deep-research-github-1.0.7/` 安装本地 bundle
+如果你使用的是 Trae、OpenCode、Claude Code、Codex、Cursor 或 OpenClaw，建议优先使用下面两种 LLM 辅助安装方式。你只需要把对应 prompt 发给模型，让它帮你完成安装即可。
 
 在线安装提示词：
 
 ```text
-请直接在线读取 GitHub 仓库 https://github.com/h4444433333/net-deep-research ，找到目录 net-deep-research-github-1.0.7/ ，并把这个 skill bundle 安装到你当前宿主支持的 skill 目录中。安装完成后告诉我安装位置，并验证 /net-deep-research 是否可触发。
+请直接在线读取 GitHub 仓库 https://github.com/h4444433333/net-deep-research 的当前仓库根目录，并把其中的 SKILL.md、_meta.json、skill-card.md、references/ 和 tools/ 作为一个 skill bundle 安装到你当前宿主支持的 skill 目录中。如果你的宿主不支持直接从 GitHub 安装，请明确告诉我不支持，并给出你支持的安装方式。安装完成后告诉我安装位置，以及是否需要重启或刷新宿主。
 ```
 
 本地安装提示词：
 
 ```text
-我已经把 net-deep-research-github-1.0.7/ 下载到本地。请从这个本地目录安装 skill bundle 到你当前宿主支持的 skill 目录中。安装完成后告诉我安装位置，并验证 /net-deep-research 是否可触发。
+我已经把这个 skill bundle 下载到本地目录 /absolute/path/to/net-deep-research-github-1.0.7 。请从这个本地目录安装 SKILL.md 及相关文件到你当前宿主支持的 skill 目录中。如果你的宿主不支持从本地目录安装，请明确告诉我不支持，并给出你支持的安装方式。安装完成后告诉我安装位置，以及是否需要重启或刷新宿主。
 ```
 
-### 2. 使用
+### 2. 刷新并验证
+
+某些宿主在安装或更新 skill 后，需要重启、刷新技能索引，或重新打开会话。
+
+验证方式：
+
+```text
+/net-deep-research 你的问题
+```
+
+### 3. 使用
 
 使用下面方式触发技能：
 
@@ -129,7 +136,7 @@ LLM 安装：
 - ✅ 信源筛选更克制
 - ✅ 已验证事实和推断内容分得更清楚
 - ✅ 对冲突信息和不确定性的处理更扎实
-- ✅ 后端部分降级时，整体行为仍然稳定
+- ✅ 交叉验证让结论更不容易被单一信源带偏
 - ✅ 能直接作为本地或托管智能体环境中的复用技能包
 
 ## 为什么它更像“研究工具”而不是“会搜索的提示词”
@@ -141,27 +148,6 @@ LLM 安装：
 
 `Net Deep Research` 的目标就是避开这两种弱模式。它更强调显式选源、交叉核验、矛盾处理，以及对用户可见的证据质量。
 
-## 运行模式
-
-当后端可用时，本包优先走后端集成研究模式。
-
-当后端不可用时：
-
-- 整个运行流程仍然可用
-- 调研会继续在 fallback 模式下完成
-- 不会在用户可见输出中暴露后端状态
-
-## 附带工具
-
-`tools/score_stability.py` 是一个轻量级 Python 工具，只依赖 Python 标准库，用于给 URL 的结构稳定性打分。
-
-示例：
-
-```bash
-python3 tools/score_stability.py https://github.com/example/repo
-python3 tools/score_stability.py --json https://docs.python.org/3/
-```
-
 ## 目录结构
 
 ```text
@@ -170,6 +156,7 @@ net-deep-research-github-1.0.7/
 ├── README.zh-CN.md
 ├── SKILL.md
 ├── _meta.json
+├── references/
 ├── skill-card.md
 └── tools/
     └── score_stability.py
