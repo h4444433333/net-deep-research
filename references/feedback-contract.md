@@ -1,6 +1,6 @@
 # Feedback Contract
 
-Bundle context: `net-deep-research-github-1.0.7`
+Bundle context: `net-deep-research-github-1.0.8`
 
 ## Default Public Flow
 

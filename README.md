@@ -11,7 +11,7 @@
 
 `Net Deep Research` is a public skill bundle for AI agents that need to verify information on the live web, detect weak or misleading sources, and produce more reliable answers from evidence. It is not built to "search deeper" for its own sake. It is built to reduce the chance of being led astray by a single page, fake data, or unverified claims.
 
-If you are looking for a **reliability-first research skill**, a **source-verification agent**, a **citation-aware RAG validation workflow**, or a **research bundle for LLMs that prioritizes trustworthy output**, this repository is the public package for that job.
+If you are looking for a **reliability-first research skill**, a **source-verification agent**, a **citation-aware RAG validation workflow**, a **research bundle for LLMs that prioritizes trustworthy output**, or a **web research tool that filters dangerous and suspicious URLs before fetching**, this repository is the public package for that job.
 
 Best fit:
 
@@ -20,6 +20,7 @@ Best fit:
 - latest-information verification
 - citation-sensitive research
 - questions where weak sources can ruin the answer
+- web research scenarios that should filter dangerous or suspicious URLs first
 
 Install from:
 
@@ -87,7 +88,7 @@ Please read the GitHub repository https://github.com/h4444433333/net-deep-resear
 Prompt for local install:
 
 ```text
-I have already downloaded this skill bundle to /absolute/path/to/net-deep-research-github-1.0.7. Please install SKILL.md and its related files from that local directory into the skill directory supported by your current host. If your host does not support local-directory installation, say that clearly and tell me which installation method it does support. After installation, tell me the install path and whether the host needs a restart or reload.
+I have already downloaded this skill bundle to /absolute/path/to/net-deep-research-github-1.0.8. Please install SKILL.md and its related files from that local directory into the skill directory supported by your current host. If your host does not support local-directory installation, say that clearly and tell me which installation method it does support. After installation, tell me the install path and whether the host needs a restart or reload.
 ```
 
 ### 2. Reload And Verify
@@ -108,7 +109,21 @@ Trigger the skill with:
 /net-deep-research your question here
 ```
 
-This public package activates only on the explicit `/net-deep-research` command.
+The preferred trigger is the explicit `/net-deep-research` command.
+
+Without the explicit command, hosts should auto-activate this skill only for cases like:
+
+- deep online research rather than routine web lookup
+- truth-checking or authenticity checks on public web information
+- cross-source verification where one page should not decide the answer
+- questions that need a clear split between verified facts, evidence, and likely inference
+
+It should not auto-activate for:
+
+- ordinary web browsing questions
+- simple latest-info lookups
+- one-source factual checks
+- speed-sensitive questions that do not need a deep verification workflow
 
 Example prompts:
 
@@ -118,7 +133,7 @@ Example prompts:
 /net-deep-research What is the official policy for Beijing individual social insurance contributions this year?
 ```
 
-If installation succeeded but the host does not auto-route by intent, explicitly invoke:
+If installation succeeded but the host does not auto-route by intent, or if you want to force the deep verification path, explicitly invoke:
 
 ```text
 /net-deep-research your question here
@@ -131,6 +146,7 @@ If installation succeeded but the host does not auto-route by intent, explicitly
 - 🌐 searches across public web sources before answering
 - 🧪 queries an external backend for source reputation support
 - 🛡️ performs URL safety checks before fetching
+- 🚫 filters dangerous sites, suspicious links, and URLs that should not be fetched
 - 🧱 organizes findings into a structured research workflow
 - 🔍 cross-checks key claims instead of trusting a single page
 - 🧾 makes the evidence behind the conclusion easier to inspect instead of giving an answer that only sounds plausible
@@ -153,7 +169,7 @@ If installation succeeded but the host does not auto-route by intent, explicitly
 ## Repository Layout
 
 ```text
-net-deep-research-github-1.0.7/
+net-deep-research-github-1.0.8/
 ├── README.md
 ├── SKILL.md
 ├── _meta.json

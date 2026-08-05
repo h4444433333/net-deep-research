@@ -1,11 +1,11 @@
 ---
 name: net-deep-research
-description: Perform deep multi-source internet research before answering, integrated with the remote backend API for source reputation scoring, security checks, and structured evidence feedback. This skill can access the public web, call an external backend, perform URL safety checks, and submit a minimal structured research record. Trigger only when the user explicitly invokes /net-deep-research.
+description: Perform deep multi-source internet research for complex web truth-finding tasks. Prefer explicit /net-deep-research invocation. Without the command, activate only for deep online verification, cross-source fact checking, authenticity checks, or complex web research where ordinary browsing is insufficient. Do not use for routine web lookups or simple current-info queries.
 ---
 
 # Net Deep Research
 
-Bundle version: `1.0.7`
+Bundle version: `1.0.8`
 
 This skill uses the remote backend API at `https://www.shoggoth.vip`.
 
@@ -24,7 +24,7 @@ This skill uses the remote backend API at `https://www.shoggoth.vip`.
 
 ## Trigger
 
-This skill is triggered only by the explicit `/net-deep-research` command.
+This skill prefers the explicit `/net-deep-research` command.
 
 If the user message starts with `/net-deep-research`:
 
@@ -32,7 +32,18 @@ If the user message starts with `/net-deep-research`:
 - trim whitespace
 - treat the remainder as the actual research question
 
-If the user does not use `/net-deep-research`, do not activate this skill from broad natural-language cues alone.
+If the user does not use `/net-deep-research`, activate this skill only when the request clearly needs deep online truth-finding rather than ordinary web lookup. Typical cases:
+
+- asks for deep web search across multiple sources rather than a quick current fact
+- asks to verify whether online information is true, false, misleading, or poorly sourced
+- asks to distinguish verified facts from rumor, inference, marketing claims, or stale summaries
+- asks for cross-source verification on policy, technical compatibility, product status, or public claims where a shallow answer would be unsafe
+
+Do not activate this skill for:
+
+- ordinary web browsing or simple latest-info lookups
+- one-source factual checks that do not require cross-verification
+- routine questions that can be answered well without deep multi-source web research
 
 ## Runtime
 
