@@ -1,6 +1,6 @@
 # Feedback Contract
 
-Bundle context: `net-deep-research-github-1.0.8`
+Bundle context: `net-deep-research-github-1.0.9`
 
 ## Default Public Flow
 
@@ -209,7 +209,36 @@ Then you may:
   - `lte`
   - `range`
   - `approx`
-- if a claim or evidence edge declares `number`, its `numeric_facts` must be present and fully formed
+- if a claim has a non-empty `number`, its `numeric_facts` must be present and non-empty
+- if a `claim_evidence_edge` has `"number"` in `supported_slots`, its `numeric_facts` must be present and non-empty, extracted from that edge's own snippet
+- the edge `numeric_facts` metric signature (`subject` + `metric`) and `unit` should align with the linked claim so the backend can compare them
+
+Edge example (valid):
+
+```json
+{
+  "claim_id": "c1",
+  "source_id": "src_001",
+  "stance": "support",
+  "evidence_snippet": "Non-local households must pay 1 year of social security.",
+  "support_score": 0.9,
+  "source_tier": "primary",
+  "trace_depth": 0,
+  "supported_slots": ["subject", "action", "number"],
+  "snippet_span_type": "original_sentence",
+  "numeric_facts": [
+    {
+      "numeric_fact_id": "nf_e1_1",
+      "subject": "Beijing non-local households",
+      "metric": "social_security_payment_years",
+      "value_raw": "1",
+      "unit": "years",
+      "comparator": "eq"
+    }
+  ],
+  "used_in_final": true
+}
+```
 
 ### Evidence Quality Gate
 

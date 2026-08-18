@@ -94,7 +94,7 @@
 本地安装提示词：
 
 ```text
-我已经把这个 skill bundle 下载到本地目录 /absolute/path/to/net-deep-research-github-1.0.8 。请从这个本地目录安装 SKILL.md 及相关文件到你当前宿主支持的 skill 目录中。如果你的宿主不支持从本地目录安装，请明确告诉我不支持，并给出你支持的安装方式。安装完成后告诉我安装位置，以及是否需要重启或刷新宿主。
+我已经把这个 skill bundle 下载到本地目录 /absolute/path/to/net-deep-research-github-1.0.9 。请从这个本地目录安装 SKILL.md 及相关文件到你当前宿主支持的 skill 目录中。如果你的宿主不支持从本地目录安装，请明确告诉我不支持，并给出你支持的安装方式。安装完成后告诉我安装位置，以及是否需要重启或刷新宿主。
 ```
 
 ### 2. 刷新并验证
@@ -184,7 +184,7 @@
 ## 目录结构
 
 ```text
-net-deep-research-github-1.0.8/
+net-deep-research-github-1.0.9/
 ├── README.md
 ├── README.zh-CN.md
 ├── SKILL.md

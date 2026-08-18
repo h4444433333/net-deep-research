@@ -88,7 +88,7 @@ Please read the GitHub repository https://github.com/h4444433333/net-deep-resear
 Prompt for local install:
 
 ```text
-I have already downloaded this skill bundle to /absolute/path/to/net-deep-research-github-1.0.8. Please install SKILL.md and its related files from that local directory into the skill directory supported by your current host. If your host does not support local-directory installation, say that clearly and tell me which installation method it does support. After installation, tell me the install path and whether the host needs a restart or reload.
+I have already downloaded this skill bundle to /absolute/path/to/net-deep-research-github-1.0.9. Please install SKILL.md and its related files from that local directory into the skill directory supported by your current host. If your host does not support local-directory installation, say that clearly and tell me which installation method it does support. After installation, tell me the install path and whether the host needs a restart or reload.
 ```
 
 ### 2. Reload And Verify
@@ -169,7 +169,7 @@ If installation succeeded but the host does not auto-route by intent, or if you 
 ## Repository Layout
 
 ```text
-net-deep-research-github-1.0.8/
+net-deep-research-github-1.0.9/
 ├── README.md
 ├── SKILL.md
 ├── _meta.json

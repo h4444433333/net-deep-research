@@ -5,7 +5,7 @@ description: Perform deep multi-source internet research for complex web truth-f
 
 # Net Deep Research
 
-Bundle version: `1.0.8`
+Bundle version: `1.0.9`
 
 This skill uses the remote backend API at `https://www.shoggoth.vip`.
 
@@ -71,7 +71,7 @@ Run this workflow:
 7. research in multiple rounds and compare sources across angles
 8. resolve conflicts or state them plainly
 9. write the answer from a structured evidence map
-10. if external sources were actually used, send the default minimal structured feedback record
+10. if external sources were actually used, submit the structured record to `POST /v1/research-feedback`, including `claims`, `claim_evidence_edges`, and when derivable also `claim_slot_evidences`, `typed_conflicts`, `candidate_causal_edges`, `causal_gaps`
 
 Keep the workflow principle short and stable:
 
@@ -86,6 +86,7 @@ Default public flow:
 - if external sources were fetched and used -> send `POST /v1/research-feedback`
 - if no external sources were fetched -> skip backend record by default
 - do not send raw query text, full answer text, or `offnet-analysis` in the default public flow
+- when the evidence map is rich enough, prefer explicit semantic fields over leaving all semantic synthesis to the backend
 
 Explicit high-sensitivity mode:
 
@@ -98,11 +99,93 @@ Explicit vote mode:
 - `POST /v1/sources/vote` is not a default closing step
 - only use it when the user explicitly wants to submit a trust/untrust vote
 
+## Numeric Facts Requirement
+
+The backend hard-rejects (400) any research-feedback payload where a numeric slot is present but `numeric_facts` is missing. Generate `numeric_facts` wherever the rule applies.
+
+### Trigger
+
+- A claim with a non-empty `number` field MUST include at least one entry in its `numeric_facts`.
+- A `claim_evidence_edge` with `"number"` in `supported_slots` MUST include at least one entry in its `numeric_facts`.
+
+### Field shape
+
+Each `numeric_fact` entry:
+
+- `numeric_fact_id` (required): unique id with `nf_` prefix, e.g. `nf_c1_1`
+- `subject` (required): entity the number belongs to (align with the claim `subject`)
+- `metric` (required): metric name, e.g. `social_security_payment_years`, `new_home_price_mom`
+- `value_raw` (required): the raw number, e.g. `1`, `3`, `0.2%`, or a range `2-3`
+- `unit` (required, non-empty): e.g. `years`, `%`, `CNY`, `units`, `percentage_points`
+- `comparator` (optional, default `eq`): one of `eq`, `gt`, `gte`, `lt`, `lte`, `range`, `approx`
+- optional: `time`, `location`, `scope`, `evidence_span`
+
+### claim vs edge meaning
+
+- `claim.numeric_facts`: the number asserted by the claim text.
+- `edge.numeric_facts`: the number extracted from that edge's source snippet.
+
+The backend compares them only when `subject` + `metric` (metric signature) and `unit` both match.
+
+### Avoid false triggers
+
+`number` is for measurable values only. Put document codes and policy names into `version_or_policy_name` (e.g. `BJJD-2026-400`) and bare dates into `time` — not `number` — so `numeric_facts` stays meaningful.
+
+Claim example:
+
+```json
+{
+  "claim_id": "c1",
+  "number": "1",
+  "numeric_facts": [
+    {
+      "numeric_fact_id": "nf_c1_1",
+      "subject": "Beijing non-local households",
+      "metric": "social_security_payment_years",
+      "value_raw": "1",
+      "unit": "years",
+      "comparator": "eq"
+    }
+  ]
+}
+```
+
+Edge example:
+
+```json
+{
+  "claim_id": "c1",
+  "source_id": "src_001",
+  "stance": "support",
+  "evidence_snippet": "Non-local households must pay 1 year of social security.",
+  "support_score": 0.9,
+  "source_tier": "primary",
+  "trace_depth": 0,
+  "supported_slots": ["subject", "action", "number"],
+  "snippet_span_type": "original_sentence",
+  "numeric_facts": [
+    {
+      "numeric_fact_id": "nf_e1_1",
+      "subject": "Beijing non-local households",
+      "metric": "social_security_payment_years",
+      "value_raw": "1",
+      "unit": "years",
+      "comparator": "eq"
+    }
+  ],
+  "used_in_final": true
+}
+```
+
+When an edge declares `"number"` in `supported_slots`, it MUST fill `edge.numeric_facts` even if the linked claim already has `numeric_facts`. Keep the edge `subject` + `metric` (metric signature) and `unit` aligned with the claim so the backend comparison succeeds.
+
 ## User-Facing Output Constraints
 
 - never expose backend health checks, routing, retries, logs, payloads, or transport diagnostics
 - only surface user-relevant research findings, source evidence, uncertainty, and source reputation signals
 - do not narrate the internal workflow step by step in the final answer
+- separate the machine-side structured feedback (what is submitted to the backend) from the human-facing answer (what the user reads); never dump the raw `sources` / `claims` / `claim_evidence_edges` payload into the answer
+- never expose internal identifiers in the human-facing answer: no `src_*` / `claim_*` / `edge_*` / `node_*` citation ids or machine keys — reference sources only by readable name, domain, and type (e.g. official / media / derivative / secondhand)
 
 ## Final Answer Shape
 
