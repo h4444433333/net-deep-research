@@ -157,6 +157,7 @@ If installation succeeded but the host does not auto-route by intent, or if you 
 - `skill-card.md` - short marketplace-style description
 - `_meta.json` - package metadata
 - `tools/score_stability.py` - local URL stability scoring helper
+- `engine/` - the open-source backend engine (see below)
 
 ## Why It Feels Better Than Generic Web Search
 
@@ -175,9 +176,72 @@ net-deep-research-github-1.0.9/
 ├── _meta.json
 ├── references/
 ├── skill-card.md
+├── engine/                  # open-source backend engine
+│   ├── README.md            # module-by-module reference
+│   ├── requirements.txt
+│   ├── main.py
+│   ├── models/
+│   ├── services/
+│   ├── db/
+│   ├── cache/
+│   ├── repositories/
+│   ├── handlers/
+│   ├── jobs/
+│   └── utils/
 └── tools/
     └── score_stability.py
 ```
+
+## Engine (Backend)
+
+The `engine/` directory is the open-source backend that powers this skill. It
+implements source reputation, structured claim verification, numeric-fact checking,
+typed conflict detection, and causal synthesis — the same code that runs behind
+`POST /v1/research-feedback` at `https://www.shoggoth.vip`.
+
+A module-by-module reference lives in [engine/README.md](./engine/README.md).
+
+### Quickstart (pure-logic core, no database)
+
+```bash
+cd engine
+python -m venv .venv && source .venv/bin/activate
+pip install "pydantic>=2.0,<3.0"
+```
+
+```python
+import sys
+sys.path.insert(0, ".")  # engine/ is the import root
+
+from services.query_normalizer import normalize_query
+from services.numeric_verification import normalize_numeric_fact, compare_numeric_facts
+from services.quality_scorer import QualityScorer
+from models.source import FeedbackRequest
+```
+
+### Quickstart (full backend)
+
+```bash
+cd engine
+pip install -r requirements.txt
+psql "$DB_NAME" -f db/schema.sql
+psql "$DB_NAME" -f db/seed.sql
+gunicorn --bind 0.0.0.0:5000 --workers 2 --threads 4 --worker-class gthread main:create_app
+```
+
+### Requirements
+
+`engine/requirements.txt`:
+
+```text
+flask>=3.0,<4.0
+gunicorn>=22.0,<24.0
+psycopg2-binary>=2.9,<3.0
+redis>=4.0,<6.0
+pydantic>=2.0,<3.0
+```
+
+Pure-logic core only needs `pydantic`; the full backend also needs PostgreSQL and Redis.
 
 ## Best Fit Use Cases
 
