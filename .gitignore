@@ -1,0 +1,19 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Virtual environments
+.venv/
+venv/
+env/
+
+# Runtime artifacts (SQLite model files, logs, caches)
+engine/data/
+*.db
+*.sqlite3
+*.log
+
+# Environment / secrets
+.env
+.env.*

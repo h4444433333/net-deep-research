@@ -1,0 +1,40 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "net-deep-research"
+version = "1.1.1"
+description = "Multi-source web truth-finding CLI/library with source reputation, evidence chains, and citation passports"
+readme = "README.md"
+requires-python = ">=3.10"
+license = { text = "MIT-0" }
+authors = [{ name = "net-deep-research" }]
+keywords = ["deep-research", "fact-checking", "source-reputation", "llm", "research-agent"]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Environment :: Console",
+    "Intended Audience :: Developers",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Topic :: Internet",
+    "Topic :: Scientific/Engineering :: Artificial Intelligence",
+]
+# Zero third-party runtime dependencies (stdlib only)
+dependencies = []
+
+[project.urls]
+Homepage = "https://www.shoggoth.vip"
+
+[project.scripts]
+net-deep-research = "net_deep_research.cli:main"
+
+[tool.setuptools.packages.find]
+include = ["net_deep_research*"]
+
+[tool.setuptools.package-data]
+"net_deep_research.tools" = ["*.py"]

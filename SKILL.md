@@ -5,7 +5,7 @@ description: Perform deep multi-source internet research for complex web truth-f
 
 # Net Deep Research
 
-Bundle version: `1.0.9`
+Bundle version: `1.1.1`
 
 This skill uses the remote backend API at `https://www.shoggoth.vip`.
 
@@ -30,6 +30,7 @@ If the user message starts with `/net-deep-research`:
 
 - remove the matched command prefix
 - trim whitespace
+- if the remainder contains `--report`, enable Report Mode and remove the flag
 - treat the remainder as the actual research question
 
 If the user does not use `/net-deep-research`, activate this skill only when the request clearly needs deep online truth-finding rather than ordinary web lookup. Typical cases:
@@ -215,6 +216,22 @@ Expected behavior:
 - answer with evidence and uncertainty
 - if external sources were used, submit the default minimal structured feedback record
 
+## Report Mode
+
+Trigger conditions (either):
+
+- the remainder after `/net-deep-research` contains `--report` — remove the flag and treat the rest as the research question
+- after a completed run, the user explicitly asks for a full report (e.g. replies "报告" or "出完整报告")
+
+Behavior:
+
+- run the normal research workflow, then produce the report from the already-collected evidence map; do not re-search unless the evidence map is empty
+- follow `references/report-format.md` strictly: fixed 10-section order, consulting-style discipline (pyramid principle, hypothesis verdicts, fact / inference / speculation separation), and the deterministic A/B/C/U evidence grading rules
+- never expose machine ids (`src_*` / `c1` / edge keys) in the report; reference sources by readable name, domain, and type
+- the structured feedback submission stays unchanged; Report Mode only changes the human-facing deliverable
+- deliver exactly ONE report file: write the report markdown to a temp file, then run the bundled renderer `python3 tools/md_to_pdf.py <report.md>`; if it exits 0, deliver the generated PDF (and remove the intermediate markdown); if it exits non-zero (no Chrome/Chromium/Edge found or render failure), deliver the markdown file instead — never output extra artifacts (JSON, HTML) alongside the report
+- non-report runs end the default answer with a one-line hint that a full report can be requested by replying "报告"
+
 ## References
 
 Detailed implementation rules live here:
@@ -222,6 +239,7 @@ Detailed implementation rules live here:
 - `references/feedback-contract.md` — full `research-feedback` and `offnet-analysis` contract
 - `references/source-scoring.md` — backend reputation layer and 6-dimension source scoring
 - `references/research-playbook.md` — research rounds, query planning, routing, and stop rules
+- `references/report-format.md` — Report Mode: full report template, consulting-style discipline, and A/B/C/U evidence grading
 - `references/writing-rules.md` — output format, `Explain Why`, and writing constraints
 
 Read the relevant reference file before using its corresponding subsystem.
