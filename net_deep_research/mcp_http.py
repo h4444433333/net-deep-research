@@ -19,6 +19,9 @@ Configuration via environment variables:
     NDR_MCP_HTTP_PORT  listen port  (default 8086)
     NDR_MCP_HTTP_PATH  endpoint path override (fastmcp 2.x / mcp SDK 1.x only;
                        fastmcp 3.x always serves /mcp)
+    NDR_MCP_ALLOWED_HOSTS  comma-separated Host header allowlist for the mcp
+                       SDK DNS-rebinding guard (default: the shoggoth.vip
+                       domains; widen when served under other hostnames)
 
 Put this behind TLS with a reverse proxy (Caddy/nginx) and register the
 public HTTPS URL, e.g. https://www.shoggoth.vip/mcp/
@@ -39,24 +42,43 @@ def main() -> None:
     host = os.environ.get("NDR_MCP_HTTP_HOST", "127.0.0.1")
     port = int(os.environ.get("NDR_MCP_HTTP_PORT", "8086"))
     path = os.environ.get("NDR_MCP_HTTP_PATH", "/mcp")
+    allowed_hosts = [
+        h.strip()
+        for h in os.environ.get(
+            "NDR_MCP_ALLOWED_HOSTS", "www.shoggoth.vip,shoggoth.vip"
+        ).split(",")
+    ]
 
     try:
         # fastmcp 3.x forwards host/port/path as transport kwargs
-        mcp.run(transport="streamable-http", host=host, port=port, path=path)
+        mcp.run(
+            transport="streamable-http",
+            host=host,
+            port=port,
+            path=path,
+            allowed_hosts=allowed_hosts,
+        )
+        return
     except TypeError:
-        # fastmcp 2.x / mcp SDK 1.x keep them on the settings object
-        settings = getattr(mcp, "settings", None)
-        if settings is not None:
-            settings.host = host
-            settings.port = port
-            try:
-                settings.path = path
-            except ValueError:
-                pass  # path not configurable on this SDK version
-        try:
-            mcp.run(transport="streamable-http")
-        except (ValueError, KeyError):
-            mcp.run(transport="http")
+        pass
+
+    # mcp SDK FastMCP: host/port/path + DNS-rebinding allowlist live on settings.
+    # The SDK defaults to protection=ON with loopback-only hosts, which rejects
+    # every request arriving through a reverse proxy -> retarget the allowlist.
+    settings = getattr(mcp, "settings", None)
+    if settings is not None:
+        settings.host = host
+        settings.port = port
+        for attr in ("streamable_http_path", "mount_path"):
+            if hasattr(settings, attr):
+                setattr(settings, attr, path)
+                break
+        ts = getattr(settings, "transport_security", None)
+        if ts is not None:
+            ts.allowed_hosts = list(allowed_hosts)
+            # allowed_origins stays at the SDK default (loopback): tool-to-tool
+            # calls carry no Origin header, TLS termination sits at the gateway
+    mcp.run(transport="streamable-http")
 
 
 if __name__ == "__main__":
