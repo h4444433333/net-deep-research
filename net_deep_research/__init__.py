@@ -14,5 +14,5 @@ As a library:
 
 from .cli import research
 
-__version__ = "1.1.3"
+__version__ = "1.1.4"
 __all__ = ["research", "__version__"]

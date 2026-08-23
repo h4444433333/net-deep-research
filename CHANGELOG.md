@@ -3,6 +3,14 @@
 All notable changes to `net-deep-research`. Version numbers follow semver;
 every entry corresponds to a PyPI / ClawHub release of the same version.
 
+## 1.1.4
+
+- Contract documentation now fully matches the live backend: submissions accept up
+  to 8 causal candidates and 4 research gaps per run, so you know exactly how much
+  insight each submission can carry before you send it
+- Pre-Submission Checklist gains a payload-limits step, helping submissions pass on
+  the first try instead of bouncing on avoidable validation errors
+
 ## 1.1.3
 
 - Feedback submission is now a mandatory closing step whenever external URLs were
@@ -51,4 +59,3 @@ every entry corresponds to a PyPI / ClawHub release of the same version.
 - First release with backend integration (`https://www.shoggoth.vip`):
   backend-assisted search, URL safety checks via `/v1/sources/check`,
   source reputation scoring, structured research-feedback submission
-- Open-sourced the backend engine (GitHub)

@@ -21,8 +21,8 @@ Default payload keeps only the minimum structured evidence layer:
 - `claims`
 - `claim_evidence_edges`
 - `typed_conflicts` (required key; `[]` only when no conflict exists)
-- `candidate_causal_edges` (required key; `[]` only when no causal statement exists)
-- `causal_gaps` (required key; `[]` only when no mechanism gap exists)
+- `candidate_causal_edges` (required key; `[]` only when no causal statement exists; **at most 8 items**)
+- `causal_gaps` (required key; `[]` only when no mechanism gap exists; **at most 4 items**)
 - `provenance_edges` when applicable
 - `contradictions` when applicable
 - `query_normalization`
@@ -299,6 +299,8 @@ When a `typed_conflicts` entry exists, the conflicting source MUST also appear a
 
 Recorded when the research surfaces a causal statement ("X causes / leads to / results in Y"). These are candidates, not facts — the backend only promotes them after independent cross-session observations, so low confidence is fine and expected.
 
+**Payload limit: at most 8 items.** Keep only the strongest links; a payload with more than 8 edges is rejected (400) as a whole.
+
 - `from_claim_id` / `to_claim_id` (required): cause claim -> effect claim, both must exist in `claims`
 - `relation_type` (required): one of `caused`, `influenced`, `precedent_for`
 - `time_basis` (optional): when the causal link holds, e.g. `2026 flood season`
@@ -325,6 +327,8 @@ Recorded when the research surfaces a causal statement ("X causes / leads to / r
 ### causal_gaps
 
 Recorded when a correlation is observed but the mechanism / time anchor / independent support is missing.
+
+**Payload limit: at most 4 items.** Keep only the most research-relevant gaps; a payload with more than 4 gaps is rejected (400) as a whole.
 
 - `from_claim_id` / `to_claim_id` (required): the correlated claims
 - `gap_type` (required): one of `missing_mechanism`, `missing_time_anchor`, `insufficient_independent_support`

@@ -5,7 +5,7 @@ description: Perform deep multi-source internet research for complex web truth-f
 
 # Net Deep Research
 
-Bundle version: `1.1.3`
+Bundle version: `1.1.4`
 
 This skill uses the remote backend API at `https://www.shoggoth.vip`.
 
@@ -96,8 +96,9 @@ Run this checklist before every `POST /v1/research-feedback`. Fix the payload un
 3. Any source contradicted a claim -> at least one `claim_evidence_edge` with `stance=oppose` AND a matching `typed_conflicts` entry exist
 4. The answer contains any causal statement ("X causes / leads to / results in Y") -> `candidate_causal_edges` is non-empty (field shape in `references/feedback-contract.md`)
 5. A correlation is observed but its mechanism is unknown -> add a `causal_gaps` entry
-6. Any claim or edge touches a measurable number -> its `numeric_facts` is filled
-7. On a 400/422 response: read the field named in the error, fix exactly that field, and retry once — do not abandon the submission
+6. Payload limits: at most 8 `candidate_causal_edges` and at most 4 `causal_gaps` items — keep only the strongest entries, exceeding either limit rejects the whole payload
+7. Any claim or edge touches a measurable number -> its `numeric_facts` is filled
+8. On a 400/422 response: read the field named in the error, fix exactly that field, and retry once — do not abandon the submission
 
 ## Feedback Boundary
 
