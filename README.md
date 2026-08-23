@@ -24,8 +24,10 @@ Best fit:
 
 Install from:
 
-- [ClawHub - Net Deep Research](https://clawhub.ai/h4444433333/skills/net-deep-research)
-- [ClawHub - Versions](https://clawhub.ai/h4444433333/skills/net-deep-research#versions)
+- [ClawHub - Net Deep Research](https://clawhub.ai/h4444433333/skills/net-deep-research) (skill bundle for agent hosts; [versions](https://clawhub.ai/h4444433333/skills/net-deep-research#versions))
+- PyPI: `pip install net-deep-research` (CLI + library; add `[mcp]` for the MCP server)
+- [GitHub - h4444433333/net-deep-research](https://github.com/h4444433333/net-deep-research) (run from source)
+- MCP clients: `pip install "net-deep-research[mcp]"` then register `net-deep-research-mcp` (see [Path D](#path-d-mcp-server))
 
 ### Why People Try It
 
@@ -70,7 +72,18 @@ With it, the intended behavior is closer to:
 
 ## Quick Start
 
+Pick the path that matches how you want to use it:
+
+| Path | Best for |
+|---|---|
+| **A. Skill install** | Agent hosts (Trae, OpenCode, Claude Code, Codex, Cursor, OpenClaw) |
+| **B. pip install** | Terminal users and Python programs |
+| **C. Run from source** | Development and hacking on this repo |
+| **D. MCP server** | MCP-capable clients (Claude Desktop, Qoder, ...) |
+
 ### 1. Install
+
+#### Path A: Skill install (agent hosts)
 
 Preferred:
 
@@ -88,8 +101,81 @@ Please read the GitHub repository https://github.com/h4444433333/net-deep-resear
 Prompt for local install:
 
 ```text
-I have already downloaded this skill bundle to /absolute/path/to/net-deep-research-github-1.0.9. Please install SKILL.md and its related files from that local directory into the skill directory supported by your current host. If your host does not support local-directory installation, say that clearly and tell me which installation method it does support. After installation, tell me the install path and whether the host needs a restart or reload.
+I have already downloaded this skill bundle to /absolute/path/to/net-deep-research. Please install SKILL.md and its related files from that local directory into the skill directory supported by your current host. If your host does not support local-directory installation, say that clearly and tell me which installation method it does support. After installation, tell me the install path and whether the host needs a restart or reload.
 ```
+
+#### Path B: pip install (CLI / library)
+
+```bash
+pip install net-deep-research          # Python >= 3.10, zero third-party dependencies
+```
+
+If the package has not propagated to pypi.org yet, install the same build
+from TestPyPI instead:
+
+```bash
+pip install -i https://test.pypi.org/simple/ net-deep-research
+```
+
+Configure via a `.env` file in your working directory or via environment variables
+(see `.env.example` in this repo); `LLM_API_KEY` is the only required value:
+
+```bash
+cp .env.example .env                   # then fill in LLM_API_KEY
+```
+
+Two usage forms:
+
+```bash
+# Terminal
+net-deep-research "your question" [--report]
+```
+
+```python
+# Python program
+from net_deep_research import research
+result = research("your question", report=False)
+print(result["answer"])
+```
+
+#### Path C: Run from source (this repo)
+
+```bash
+git clone https://github.com/h4444433333/net-deep-research.git
+cd net-deep-research
+cp .env.example .env                   # then fill in LLM_API_KEY
+python3 research_cli.py "your question" [--report]
+```
+
+`research_cli.py` is a thin entry point that forwards to
+`net_deep_research/cli.py:main`; no packaging step is needed.
+
+#### Path D: MCP server
+
+```bash
+pip install "net-deep-research[mcp]"
+```
+
+Register in your MCP client (Claude Desktop, Qoder, ...) using the console
+entry point installed by pip:
+
+```json
+{
+  "mcpServers": {
+    "net-deep-research": {
+      "command": "net-deep-research-mcp",
+      "args": []
+    }
+  }
+}
+```
+
+If you run from a source checkout instead of pip, point `args` at the adapter
+script: `["/absolute/path/to/net-deep-research/channels/mcp/server.py"]`
+with `"command": "python"`.
+
+Exposes two tools: `deep_research(question)` (full multi-source research) and
+`check_source(url)` (URL safety screening). Details in `channels/mcp/README.md`.
 
 ### 2. Reload And Verify
 
@@ -169,7 +255,7 @@ If installation succeeded but the host does not auto-route by intent, or if you 
 ## Repository Layout
 
 ```text
-net-deep-research-github-1.0.9/
+net-deep-research-github-1.1.0/
 ├── README.md
 ├── SKILL.md
 ├── _meta.json

@@ -39,7 +39,7 @@ Mitigation: The skill degrades gracefully — falls back to built-in source scor
 **Other Properties Related to Output:** [Encourages primary-source evidence, multi-angle decomposition, source scoring (backend + built-in), security pre-checks, conflict notes, explicit uncertainty, default minimal structured feedback, and explicit audit/vote boundaries.] <br>
 
 ## Skill Version(s): <br>
-1.1.1 <br>
+1.1.2 <br>
 
 ## Ethical Considerations: <br>
 Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>

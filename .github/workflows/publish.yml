@@ -1,0 +1,49 @@
+name: Publish
+
+# Triggered only by version tags (v1.2.3). Tokens live in GitHub Secrets:
+#   TESTPYPI_TOKEN / PYPI_TOKEN  (never committed, never logged)
+on:
+  push:
+    tags: ["v*.*.*"]
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install tooling
+        run: pip install build twine pytest
+      - name: Version points consistency
+        run: python scripts/bump_version.py --check
+      - name: Unit tests
+        run: pytest tests/ -q
+      - name: Build
+        run: python -m build
+      - name: Twine check
+        run: twine check dist/*
+      - name: Upload to TestPyPI
+        env:
+          TWINE_USERNAME: __token__
+          TWINE_PASSWORD: ${{ secrets.TESTPYPI_TOKEN }}
+        run: twine upload --repository testpypi dist/*
+      - name: Verify install from TestPyPI
+        run: |
+          VERSION="${GITHUB_REF_NAME#v}"
+          python -m venv /tmp/verify
+          /tmp/verify/bin/pip install -q --index-url https://test.pypi.org/simple/ "net-deep-research==${VERSION}"
+          /tmp/verify/bin/python -c "import net_deep_research as n; assert n.__version__ == '${VERSION}', n.__version__"
+      - name: Upload to PyPI
+        env:
+          TWINE_USERNAME: __token__
+          TWINE_PASSWORD: ${{ secrets.PYPI_TOKEN }}
+        run: twine upload dist/*
+      - name: GitHub Release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh release create "${GITHUB_REF_NAME}" dist/* \
+            --title "${GITHUB_REF_NAME}" \
+            --notes "$(sed -n "/## ${GITHUB_REF_NAME#v}/,/^## /p" CHANGELOG.md | sed '$d')"

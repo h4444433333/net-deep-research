@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "net-deep-research"
-version = "1.1.1"
+version = "1.1.2"
 description = "Multi-source web truth-finding CLI/library with source reputation, evidence chains, and citation passports"
 readme = "README.md"
 requires-python = ">=3.10"
@@ -27,11 +27,17 @@ classifiers = [
 # Zero third-party runtime dependencies (stdlib only)
 dependencies = []
 
+# Optional extras for channel adapters (core stays dependency-free)
+[project.optional-dependencies]
+# mcp SDK 1.x ships FastMCP; 2.x removed it, hence the fastmcp fallback
+mcp = ["fastmcp>=2.0"]
+
 [project.urls]
 Homepage = "https://www.shoggoth.vip"
 
 [project.scripts]
 net-deep-research = "net_deep_research.cli:main"
+net-deep-research-mcp = "net_deep_research.mcp_server:main"
 
 [tool.setuptools.packages.find]
 include = ["net_deep_research*"]

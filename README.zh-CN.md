@@ -30,8 +30,10 @@
 
 安装入口：
 
-- [ClawHub - Net Deep Research](https://clawhub.ai/h4444433333/skills/net-deep-research)
-- [ClawHub - 版本列表](https://clawhub.ai/h4444433333/skills/net-deep-research#versions)
+- [ClawHub - Net Deep Research](https://clawhub.ai/h4444433333/skills/net-deep-research)（Agent 宿主的 skill bundle；[版本列表](https://clawhub.ai/h4444433333/skills/net-deep-research#versions)）
+- PyPI：`pip install net-deep-research`（命令行 + 库；装 MCP 服务加 `[mcp]`）
+- [GitHub - h4444433333/net-deep-research](https://github.com/h4444433333/net-deep-research)（源码直跑）
+- MCP 客户端：`pip install "net-deep-research[mcp]"` 后注册 `net-deep-research-mcp`（见[路径 D](#路径-dmcp-服务)）
 
 ### 为什么别人会试它
 
@@ -76,7 +78,18 @@
 
 ## 快速开始
 
+按你的使用方式选一条路径：
+
+| 路径 | 适用人群 |
+|---|---|
+| **A. Skill 安装** | Agent 宿主（Trae、OpenCode、Claude Code、Codex、Cursor、OpenClaw） |
+| **B. pip 安装** | 终端用户与 Python 程序 |
+| **C. 源码直跑** | 在本仓库上开发、改造 |
+| **D. MCP 服务** | 支持 MCP 的客户端（Claude Desktop、Qoder 等） |
+
 ### 1. 安装
+
+#### 路径 A：Skill 安装（Agent 宿主）
 
 首选：
 
@@ -94,8 +107,79 @@
 本地安装提示词：
 
 ```text
-我已经把这个 skill bundle 下载到本地目录 /absolute/path/to/net-deep-research-github-1.0.9 。请从这个本地目录安装 SKILL.md 及相关文件到你当前宿主支持的 skill 目录中。如果你的宿主不支持从本地目录安装，请明确告诉我不支持，并给出你支持的安装方式。安装完成后告诉我安装位置，以及是否需要重启或刷新宿主。
+我已经把这个 skill bundle 下载到本地目录 /absolute/path/to/net-deep-research。请从这个本地目录安装 SKILL.md 及相关文件到你当前宿主支持的 skill 目录中。如果你的宿主不支持从本地目录安装，请明确告诉我不支持，并给出你支持的安装方式。安装完成后告诉我安装位置，以及是否需要重启或刷新宿主。
 ```
+
+#### 路径 B：pip 安装（命令行 / 库）
+
+```bash
+pip install net-deep-research          # Python >= 3.10，零第三方依赖
+```
+
+如果包尚未在 pypi.org 正式站生效，可从 TestPyPI 安装同一构建：
+
+```bash
+pip install -i https://test.pypi.org/simple/ net-deep-research
+```
+
+通过工作目录下的 `.env` 文件或环境变量配置（模板见仓库内 `.env.example`），
+唯一必填项是 `LLM_API_KEY`：
+
+```bash
+cp .env.example .env                   # 然后填入 LLM_API_KEY
+```
+
+两种使用形态：
+
+```bash
+# 命令行
+net-deep-research "你的问题" [--report]
+```
+
+```python
+# Python 程序
+from net_deep_research import research
+result = research("你的问题", report=False)
+print(result["answer"])
+```
+
+#### 路径 C：源码直跑（本仓库）
+
+```bash
+git clone https://github.com/h4444433333/net-deep-research.git
+cd net-deep-research
+cp .env.example .env                   # 然后填入 LLM_API_KEY
+python3 research_cli.py "你的问题" [--report]
+```
+
+`research_cli.py` 是转发到 `net_deep_research/cli.py:main` 的薄壳入口，
+无需任何打包步骤。
+
+#### 路径 D：MCP 服务
+
+```bash
+pip install "net-deep-research[mcp]"
+```
+
+在 MCP 客户端（Claude Desktop、Qoder 等）中注册 pip 安装后自带的
+console 入口：
+
+```json
+{
+  "mcpServers": {
+    "net-deep-research": {
+      "command": "net-deep-research-mcp",
+      "args": []
+    }
+  }
+}
+```
+
+如果是源码目录直跑而非 pip 安装，把 `command` 换成 `python`、
+`args` 指向适配脚本：`["/absolute/path/to/net-deep-research/channels/mcp/server.py"]`。
+
+暴露两个工具：`deep_research(question)`（完整多源研究）与
+`check_source(url)`（URL 安全筛查）。详见 `channels/mcp/README.md`。
 
 ### 2. 刷新并验证
 
@@ -184,7 +268,7 @@
 ## 目录结构
 
 ```text
-net-deep-research-github-1.0.9/
+net-deep-research-github-1.1.0/
 ├── README.md
 ├── README.zh-CN.md
 ├── SKILL.md

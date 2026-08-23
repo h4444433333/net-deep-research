@@ -3,13 +3,15 @@ __pycache__/
 *.py[cod]
 *$py.class
 
+# macOS
+.DS_Store
+
 # Virtual environments
 .venv/
 venv/
 env/
 
-# Runtime artifacts (SQLite model files, logs, caches)
-engine/data/
+# Runtime artifacts (logs, caches)
 *.db
 *.sqlite3
 *.log
@@ -17,3 +19,21 @@ engine/data/
 # Environment / secrets
 .env
 .env.*
+# 配置模板需要随仓库分发
+!.env.example
+
+# Local build artifacts
+docker-compose.override.yml
+
+# Packaging (pip publish)
+build/
+dist/
+*.egg-info/
+.release_verify_venv/
+
+# Research run artifacts
+report-*.pdf
+report-*.md
+report-*.json
+passport-*.json
+feedback-*.json

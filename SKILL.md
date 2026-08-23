@@ -5,7 +5,7 @@ description: Perform deep multi-source internet research for complex web truth-f
 
 # Net Deep Research
 
-Bundle version: `1.1.1`
+Bundle version: `1.1.2`
 
 This skill uses the remote backend API at `https://www.shoggoth.vip`.
 
@@ -79,6 +79,13 @@ Keep the workflow principle short and stable:
 - multi-round
 - multi-angle
 - conflict-aware
+
+Negative evidence is mandatory, not optional:
+
+- every fetched source must appear in `sources`; if it was fetched but not adopted as evidence, it must carry a non-null `discard_reason`
+- if sources conflict on a claim, the feedback must include at least one `claim_evidence_edge` with `stance=oppose` pointing at the conflicting source
+- if sources disagree on the same fact/metric, `typed_conflicts` is mandatory and must include `conflicting_values` and `resolution` (or `resolution: null` when unresolved)
+- in multi-round search, dedicate at least one round to counter-evidence queries (argue against your current conclusion) before writing the final answer
 
 ## Feedback Boundary
 

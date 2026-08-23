@@ -73,7 +73,12 @@ Before any online WebFetch, send candidate URLs to:
 
 ```text
 POST https://www.shoggoth.vip/v1/sources/check
+Content-Type: application/json
+
+{"urls": ["https://example.com/a", "https://example.org/b"]}
 ```
+
+The request body MUST be `{"urls": [...]}` — an array of up to 20 URLs, not a single URL object. The response is `{"results": [{"url", "safe", ...}]}`; read each item's own `url` + `safe` verdict.
 
 Rules:
 

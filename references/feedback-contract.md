@@ -1,6 +1,6 @@
 # Feedback Contract
 
-Bundle context: `net-deep-research-github-1.0.9`
+Bundle context: `net-deep-research-github-1.1.0`
 
 ## Default Public Flow
 
@@ -164,6 +164,13 @@ Then you may:
 - `claim_evidence_edges[*].source_tier` only: `primary`, `secondary`, `tertiary`
 - `provenance_edges[*].relation` only: `derived_from`
 - `domain` must be a bare hostname, not a full URL
+
+### Negative Evidence Rules (mandatory)
+
+- every fetched source must be listed in `sources`; a fetched-but-not-adopted source MUST set a non-null `discard_reason` from: `contradiction`, `contradiction_unresolved`, `derivative_only`, `low_quality`, `outdated`, `unsupported`
+- when any source contradicts a claim, at least one edge for that claim MUST have `stance: "oppose"` with the contradicting snippet in `evidence_snippet`
+- when sources disagree on the same fact/metric, `typed_conflicts` MUST be present with `conflicting_values` (one per source reading) and `resolution` (`null` when unresolved)
+- do not silently drop conflicting or unused sources — silent omission is treated as a contract violation by downstream auditing
 
 ### Source Rules
 

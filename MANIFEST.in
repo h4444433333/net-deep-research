@@ -1,0 +1,10 @@
+# Safety: never ship real secrets into sdist/wheel
+global-exclude .env
+global-exclude *.pyc
+global-exclude __pycache__
+prune .git
+# Keep only what the package needs
+include README.md
+include LICENSE
+include .env.example
+recursive-include net_deep_research *.py

@@ -104,6 +104,7 @@ FETCH_TIMEOUT = float(_env("FETCH_TIMEOUT_SECONDS", "12") or "12")
 FETCH_MAX_CHARS = int(_env("FETCH_MAX_CHARS", "8000") or "8000")
 MAX_SEARCH_ROUNDS = max(1, int(_env("MAX_SEARCH_ROUNDS", "3") or "3"))
 MAX_SOURCES = max(1, int(_env("MAX_SOURCES", "8") or "8"))
+ADVERSARIAL_ROUND = _env("ADVERSARIAL_ROUND", "on").lower() != "off"  # forced counter-evidence round
 
 DEFAULT_HEADERS = {
     "User-Agent": "net-deep-research-cli/1.0",
@@ -374,9 +375,11 @@ def backend_online() -> bool:
     if FEEDBACK_MODE != "remote":
         return False
     if _backend_status is None:
-        for _ in range(2):  # first TLS handshake can be slow; retry once
+        # first TLS handshake can be slow (overseas region); retry a few times
+        # with a generous budget so transient jitter does not force fallback
+        for _ in range(3):
             try:
-                _http_json(f"{FEEDBACK_API_URL}/health", timeout=6.0)
+                _http_json(f"{FEEDBACK_API_URL}/health", timeout=10.0)
                 _backend_status = True
                 break
             except Exception:
@@ -655,9 +658,9 @@ def _feedback_user_prompt(query: str, evidence: str) -> str:
         '  "claim_evidence_edges": [ ... ],\n'
         '  "provenance_edges": [],\n'
         '  "contradictions": [],\n'
-        '  "typed_conflicts": [ ... optional ... ],\n'
-        '  "candidate_causal_edges": [ ... optional ... ],\n'
-        '  "causal_gaps": [ ... optional ... ],\n'
+        '  "typed_conflicts": [ ... REQUIRED whenever sources disagree on the same fact/metric ... ],\n'
+        '  "candidate_causal_edges": [ ... fill when one claim causally explains another ... ],\n'
+        '  "causal_gaps": [ ... fill when a causal link is claimed but unexplained ... ],\n'
         '  "session_confidence": 0.0,\n'
         '  "preference_blob": {"query_category":"...","source_usefulness_ratings":{...},"answer_quality_gap":"..."}\n'
         "}\n\n"
@@ -665,7 +668,17 @@ def _feedback_user_prompt(query: str, evidence: str) -> str:
         "- source_id uses src_001, src_002 ...; claim_id uses c1, c2 ...; cross references must point to existing ids.\n"
         "- domain must be a bare hostname (e.g. react.dev), never a full URL.\n"
         "- every source must include: source_id, url, domain, title, content_type, document_form, "
-        "is_official_like, structured_markers (at least 1), is_derivative.\n"
+        "is_official_like, structured_markers (at least 1), is_derivative, selected_as_evidence, cited_in_final.\n"
+        "- [negative-evidence rule] every fetched source that supports nothing MUST be accounted for: "
+        "set its discard_reason to one of contradiction | contradiction_unresolved | derivative_only | "
+        "low_quality | outdated | unsupported (never leave a useless source unaccounted).\n"
+        "- [oppose rule] whenever a source's content contradicts a claim, emit a claim_evidence_edge with "
+        "stance=oppose whose evidence_snippet quotes the contradicting statement, and mark that source "
+        "discard_reason=contradiction; never silently drop conflicting sources.\n"
+        "- [typed_conflicts rule] whenever two or more sources give different values for the same "
+        "subject+metric (or the same fact), typed_conflicts MUST contain one entry per disagreement with "
+        "claim_id, slot_name, conflict_type, source_ids (all involved), conflicting_values (each source's "
+        "value), severity.\n"
         "- content_type must be one of: official_docs | official_blog | third_party | forum | social.\n"
         "- document_form must be one of: article_page | official_notice | other | pdf | policy_page | "
         "release_note | spec_page | table_page.\n"
@@ -712,7 +725,8 @@ def _decompose(query: str) -> list[dict]:
     return angles[:5]
 
 
-def _gather_sources(queries: list[str], sources: dict[str, dict]) -> dict[str, dict]:
+def _gather_sources(queries: list[str], sources: dict[str, dict],
+                    max_sources: int = MAX_SOURCES) -> dict[str, dict]:
     """Search per keyword and fetch bodies, dedupe and accumulate into sources.
 
     sources shape: {url: {url,title,snippet,text,ok,error}}; only new candidates
@@ -728,7 +742,7 @@ def _gather_sources(queries: list[str], sources: dict[str, dict]) -> dict[str, d
             continue
         for item in results:
             url = item["url"]
-            if url in sources or len(sources) >= MAX_SOURCES:
+            if url in sources or len(sources) >= max_sources:
                 continue
             safe, reason = check_url_safe(url)
             if not safe:
@@ -792,6 +806,33 @@ def _plan_next_round(query: str, sources: dict[str, dict]) -> list[str]:
         return []
     followups = data.get("followups") or []
     return [str(q).strip() for q in followups if str(q).strip()][:3]
+
+
+_ADVERSARIAL_SYSTEM = (
+    "You are the adversarial reviewer of a deep-research run. Your only job is to "
+    "break the current findings: propose at most 2 search queries that would find "
+    "counter-evidence, refutations, corrections, or conflicting numbers for the "
+    "claims the collected sources seem to support. Target official corrections, "
+    "criticisms, retractions, and independent measurements that disagree. "
+    "Output JSON only: {\"counter_queries\": [\"...\"]}."
+)
+
+
+def _plan_adversarial_round(query: str, sources: dict[str, dict]) -> list[str]:
+    """Force a counter-evidence round: ask the LLM for queries that could refute current findings."""
+    lines = [f"{i}. {s['title'] or '(untitled)'} — {s['url']}"
+             for i, s in enumerate(sources.values(), 1)]
+    messages = [
+        {"role": "system", "content": _ADVERSARIAL_SYSTEM},
+        {"role": "user", "content": f"Research question: {query}\n\nSources collected:\n" + "\n".join(lines)},
+    ]
+    try:
+        data = _llm_json(messages)
+    except Exception as exc:
+        print(f"  [adversarial] counter-evidence planning failed, skipping: {exc}", file=sys.stderr)
+        return []
+    queries = data.get("counter_queries") or []
+    return [str(q).strip() for q in queries if str(q).strip()][:2]
 
 
 def _evidence_text(sources: dict[str, dict]) -> str:
@@ -859,6 +900,9 @@ def _generate_feedback(query: str, evidence: str, session_id: str) -> dict:
     data.setdefault("claim_evidence_edges", [])
     data.setdefault("provenance_edges", [])
     data.setdefault("contradictions", [])
+    data.setdefault("typed_conflicts", [])
+    data.setdefault("candidate_causal_edges", [])
+    data.setdefault("causal_gaps", [])
     return data
 
 
@@ -1402,6 +1446,11 @@ def research(query: str, *, report: bool = False, **overrides) -> dict:
             break
         print(f"      Round {round_no} follow-ups: {followups}")
         sources = _gather_sources(followups, sources)
+    if ADVERSARIAL_ROUND and sources:
+        counter_queries = _plan_adversarial_round(query, sources)
+        if counter_queries:
+            print(f"      Adversarial round counter-queries: {counter_queries}")
+            sources = _gather_sources(counter_queries, sources, max_sources=MAX_SOURCES + 2)
     usable = [s for s in sources.values() if s["ok"]]
     print(f"      Usable sources {len(usable)} / {len(sources)}")
     if not usable:
