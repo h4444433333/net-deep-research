@@ -170,12 +170,8 @@ entry point installed by pip:
 }
 ```
 
-If you run from a source checkout instead of pip, point `args` at the adapter
-script: `["/absolute/path/to/net-deep-research/channels/mcp/server.py"]`
-with `"command": "python"`.
-
 Exposes two tools: `deep_research(question)` (full multi-source research) and
-`check_source(url)` (URL safety screening). Details in `channels/mcp/README.md`.
+`check_source(url)` (URL safety screening).
 
 ### 2. Reload And Verify
 

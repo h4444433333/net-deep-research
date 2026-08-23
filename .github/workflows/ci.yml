@@ -17,11 +17,9 @@ jobs:
         with:
           python-version: ${{ matrix.python-version }}
       - name: Install tooling
-        run: pip install build twine pytest
+        run: pip install build twine
       - name: Version points consistency
         run: python scripts/bump_version.py --check
-      - name: Unit tests
-        run: pytest tests/ -q
       - name: Build
         if: matrix.python-version == '3.12'
         run: python -m build

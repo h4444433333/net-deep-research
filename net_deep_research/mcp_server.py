@@ -10,7 +10,7 @@ Install:
 Run (stdio transport), either via the console entry point:
     net-deep-research-mcp
 or from a source checkout:
-    python channels/mcp/server.py
+    python -m net_deep_research.mcp_server
 
 MCP client config example (after pip install):
     {"mcpServers": {"net-deep-research":

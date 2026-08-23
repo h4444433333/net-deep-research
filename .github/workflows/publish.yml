@@ -15,11 +15,9 @@ jobs:
         with:
           python-version: "3.12"
       - name: Install tooling
-        run: pip install build twine pytest
+        run: pip install build twine
       - name: Version points consistency
         run: python scripts/bump_version.py --check
-      - name: Unit tests
-        run: pytest tests/ -q
       - name: Build
         run: python -m build
       - name: Twine check

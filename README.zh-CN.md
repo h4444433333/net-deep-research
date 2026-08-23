@@ -174,11 +174,8 @@ console 入口：
 }
 ```
 
-如果是源码目录直跑而非 pip 安装，把 `command` 换成 `python`、
-`args` 指向适配脚本：`["/absolute/path/to/net-deep-research/channels/mcp/server.py"]`。
-
 暴露两个工具：`deep_research(question)`（完整多源研究）与
-`check_source(url)`（URL 安全筛查）。详见 `channels/mcp/README.md`。
+`check_source(url)`（URL 安全筛查）。
 
 ### 2. 刷新并验证
 
