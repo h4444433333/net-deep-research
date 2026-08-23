@@ -38,6 +38,7 @@ Homepage = "https://www.shoggoth.vip"
 [project.scripts]
 net-deep-research = "net_deep_research.cli:main"
 net-deep-research-mcp = "net_deep_research.mcp_server:main"
+net-deep-research-mcp-http = "net_deep_research.mcp_http:main"
 
 [tool.setuptools.packages.find]
 include = ["net_deep_research*"]
