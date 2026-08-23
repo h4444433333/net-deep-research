@@ -27,7 +27,7 @@
 | ClawHub | 平台序列（下一版为 1.0.14） | 用户手动上传；版本号由平台序列决定 |
 | 虾评 XiaPing | 1.1.5 | skill_id `3f8e9263-…`；上传时显式传 `version` |
 | MCP | 随 PyPI 包 | 无独立版本号（stdio 形态，`net-deep-research-mcp`） |
-| Smithery（smithery.ai） | 待提交表单 | MCP 目录站；HTTPS 端点已就绪：`https://www.shoggoth.vip/mcp` |
+| Smithery（smithery.ai） | 已上架（2026-08-23） | 页面 `smithery.ai/server/@shoggoth/net-deep-research`；上游端点 `https://www.shoggoth.vip/mcp`；namespace `shoggoth`（API 新建，非账号默认） |
 
 包内五处版本点（pyproject / `__init__` / `_meta.json` / SKILL.md / skill-card.md）
 仍保持一致，代表"包版本"；渠道版本是各平台自己的事。
