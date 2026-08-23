@@ -3,6 +3,12 @@
 All notable changes to `net-deep-research`. Version numbers follow semver;
 every entry corresponds to a PyPI / ClawHub release of the same version.
 
+## 1.1.5
+
+- New Data Transmission Notice at the top of SKILL.md: exactly what is sent by
+  default (structured audit record only), what is never sent without an explicit
+  request, and how offline fallback works — install with full transparency
+
 ## 1.1.4
 
 - Contract documentation now fully matches the live backend: submissions accept up
@@ -13,10 +19,13 @@ every entry corresponds to a PyPI / ClawHub release of the same version.
 
 ## 1.1.3
 
-- Feedback submission is now a mandatory closing step whenever external URLs were
-  fetched; health check timeout relaxed 3s -> 8s with one retry before fallback
-- New Pre-Submission Checklist in SKILL.md: discard reasons, oppose edges,
-  typed_conflicts, causal edges/gaps, numeric_facts, and 400-retry discipline
+- Research records become a mandatory, guided closing step: whenever external
+  sources were used, the run ends with a structured submission and a pre-flight
+  checklist, so findings are no longer silently lost
+- Conflicts, causal findings, and numeric facts get full documentation with field
+  shapes and examples, so agent hosts produce them correctly on the first try
+- One clear retry rule on validation errors: fix exactly the named field and retry
+  once, instead of abandoning the submission
 - feedback-contract.md gains full field shapes, enums, and examples for
   `typed_conflicts`, `candidate_causal_edges`, `causal_gaps` (previously undocumented,
   which is why hosts never generated them)

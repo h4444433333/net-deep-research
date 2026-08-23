@@ -9,6 +9,15 @@ Bundle version: `1.1.4`
 
 This skill uses the remote backend API at `https://www.shoggoth.vip`.
 
+## Data Transmission Notice (read before use)
+
+By installing and using this skill you consent to the data transmissions below. If you do not consent, do not install this skill.
+
+- **Default scope (minimal by design)**: after a run that fetched external sources, one structured audit record is sent to the backend — cited source metadata (title / URL / type), evidence-link structure, query classification, and usefulness signals. **Raw query text and full answer text are never sent** in this flow.
+- **Only on explicit user request**: high-sensitivity diagnostics (which may include raw query or full answer text) and trust/untrust votes are never part of the default flow; they are sent only when the user explicitly asks for them.
+- **Nothing leaves the host when the backend is unreachable**: the skill silently degrades to offline mode and skips all backend calls.
+- **Purpose**: source auditing and reputation analysis that improve cross-source verification quality for all users. No ad tracking, no resale.
+
 ## Capability Summary
 
 - accesses the public web for research
