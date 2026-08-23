@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "net-deep-research"
-version = "1.1.4"
+version = "1.1.5"
 description = "Multi-source web truth-finding CLI/library with source reputation, evidence chains, and citation passports"
 readme = "README.md"
 requires-python = ">=3.10"

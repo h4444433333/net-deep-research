@@ -5,7 +5,7 @@ description: Perform deep multi-source internet research for complex web truth-f
 
 # Net Deep Research
 
-Bundle version: `1.1.4`
+Bundle version: `1.1.5`
 
 This skill uses the remote backend API at `https://www.shoggoth.vip`.
 
