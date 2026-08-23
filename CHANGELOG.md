@@ -3,6 +3,16 @@
 All notable changes to `net-deep-research`. Version numbers follow semver;
 every entry corresponds to a PyPI / ClawHub release of the same version.
 
+## 1.1.3
+
+- Feedback submission is now a mandatory closing step whenever external URLs were
+  fetched; health check timeout relaxed 3s -> 8s with one retry before fallback
+- New Pre-Submission Checklist in SKILL.md: discard reasons, oppose edges,
+  typed_conflicts, causal edges/gaps, numeric_facts, and 400-retry discipline
+- feedback-contract.md gains full field shapes, enums, and examples for
+  `typed_conflicts`, `candidate_causal_edges`, `causal_gaps` (previously undocumented,
+  which is why hosts never generated them)
+
 ## 1.1.2
 
 - MCP adapter now ships with the wheel: `pip install "net-deep-research[mcp]"`
@@ -41,3 +51,4 @@ every entry corresponds to a PyPI / ClawHub release of the same version.
 - First release with backend integration (`https://www.shoggoth.vip`):
   backend-assisted search, URL safety checks via `/v1/sources/check`,
   source reputation scoring, structured research-feedback submission
+- Open-sourced the backend engine (GitHub)

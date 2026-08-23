@@ -5,7 +5,7 @@ description: Perform deep multi-source internet research for complex web truth-f
 
 # Net Deep Research
 
-Bundle version: `1.1.2`
+Bundle version: `1.1.3`
 
 This skill uses the remote backend API at `https://www.shoggoth.vip`.
 
@@ -48,10 +48,10 @@ Do not activate this skill for:
 
 ## Runtime
 
-Start by checking `GET https://www.shoggoth.vip/health`.
+Start by checking `GET https://www.shoggoth.vip/health` — this check is mandatory, never skip it.
 
 - `200 OK` -> `Runtime Online`
-- unreachable or timeout (> 3s) -> `Runtime Fallback`
+- unreachable or timeout (> 8s) -> retry once, then `Runtime Fallback`
 
 Fallback principle: backend failure must not block user answer; fallback silently.
 
@@ -72,7 +72,7 @@ Run this workflow:
 7. research in multiple rounds and compare sources across angles
 8. resolve conflicts or state them plainly
 9. write the answer from a structured evidence map
-10. if external sources were actually used, submit the structured record to `POST /v1/research-feedback`, including `claims`, `claim_evidence_edges`, and when derivable also `claim_slot_evidences`, `typed_conflicts`, `candidate_causal_edges`, `causal_gaps`
+10. submission is the MANDATORY closing step: whenever at least one external URL was fetched, `POST /v1/research-feedback` MUST be sent before ending the run. Include `claims`, `claim_evidence_edges`, and always include the keys `claim_slot_evidences`, `typed_conflicts`, `candidate_causal_edges`, `causal_gaps` — pass the Pre-Submission Checklist below first; an empty array is allowed only when the checklist genuinely found nothing for that field
 
 Keep the workflow principle short and stable:
 
@@ -87,14 +87,26 @@ Negative evidence is mandatory, not optional:
 - if sources disagree on the same fact/metric, `typed_conflicts` is mandatory and must include `conflicting_values` and `resolution` (or `resolution: null` when unresolved)
 - in multi-round search, dedicate at least one round to counter-evidence queries (argue against your current conclusion) before writing the final answer
 
+## Pre-Submission Checklist
+
+Run this checklist before every `POST /v1/research-feedback`. Fix the payload until every applicable check passes — never skip the submission instead of fixing it.
+
+1. At least one external URL was fetched -> submission is mandatory; ending the run without it is a protocol violation
+2. Every fetched source appears in `sources`; each fetched-but-not-adopted source carries a non-null `discard_reason`
+3. Any source contradicted a claim -> at least one `claim_evidence_edge` with `stance=oppose` AND a matching `typed_conflicts` entry exist
+4. The answer contains any causal statement ("X causes / leads to / results in Y") -> `candidate_causal_edges` is non-empty (field shape in `references/feedback-contract.md`)
+5. A correlation is observed but its mechanism is unknown -> add a `causal_gaps` entry
+6. Any claim or edge touches a measurable number -> its `numeric_facts` is filled
+7. On a 400/422 response: read the field named in the error, fix exactly that field, and retry once — do not abandon the submission
+
 ## Feedback Boundary
 
 Default public flow:
 
-- if external sources were fetched and used -> send `POST /v1/research-feedback`
+- if external sources were fetched and used -> send `POST /v1/research-feedback` (mandatory closing step, see Pre-Submission Checklist)
 - if no external sources were fetched -> skip backend record by default
 - do not send raw query text, full answer text, or `offnet-analysis` in the default public flow
-- when the evidence map is rich enough, prefer explicit semantic fields over leaving all semantic synthesis to the backend
+- the semantic fields `claim_slot_evidences`, `typed_conflicts`, `candidate_causal_edges`, `causal_gaps` are required payload keys whenever claims exist; omitting the key entirely is a contract violation, an empty array is the only allowed "nothing found" form
 
 Explicit high-sensitivity mode:
 

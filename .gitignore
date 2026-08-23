@@ -30,6 +30,7 @@ build/
 dist/
 *.egg-info/
 .release_verify_venv/
+.release_tooling/
 
 # Research run artifacts
 report-*.pdf

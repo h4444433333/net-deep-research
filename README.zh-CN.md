@@ -116,12 +116,6 @@
 pip install net-deep-research          # Python >= 3.10，零第三方依赖
 ```
 
-如果包尚未在 pypi.org 正式站生效，可从 TestPyPI 安装同一构建：
-
-```bash
-pip install -i https://test.pypi.org/simple/ net-deep-research
-```
-
 通过工作目录下的 `.env` 文件或环境变量配置（模板见仓库内 `.env.example`），
 唯一必填项是 `LLM_API_KEY`：
 
@@ -142,6 +136,11 @@ from net_deep_research import research
 result = research("你的问题", report=False)
 print(result["answer"])
 ```
+
+`--report`（Python 接口对应 `report=True`）会额外在当前目录生成一份完整研究报告
+`report-<session_id>.pdf`（本机没有 Chrome/Chromium 时降级为 `.md`）。报告包含：
+结论、逐条 claim 评级（A/B/C/U）、claim-证据链、冲突清单、因果候选，以及可供
+后端核验的引用护照。不加该参数时只输出答案文本。
 
 #### 路径 C：源码直跑（本仓库）
 

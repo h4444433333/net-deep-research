@@ -82,6 +82,12 @@ def cmd_build() -> str:
         if p.exists():
             p.unlink()
 
+    # A leftover setuptools build/ dir shadows the `build` package for
+    # `python -m build`; it is regeneratable, so drop it first.
+    stale_build_dir = ROOT / "build"
+    if stale_build_dir.exists():
+        shutil.rmtree(stale_build_dir)
+
     run([sys.executable, "-m", "build"])
     for p in (wheel, sdist):
         if not p.exists():

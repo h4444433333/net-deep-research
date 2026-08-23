@@ -1,10 +1,10 @@
 # Feedback Contract
 
-Bundle context: `net-deep-research-github-1.1.0`
+Bundle context: `net-deep-research`
 
 ## Default Public Flow
 
-Use backend feedback only when external sources were actually fetched and used.
+Whenever at least one external source was fetched, backend feedback is MANDATORY — skipping the submission is a protocol violation.
 
 Default rule:
 
@@ -20,6 +20,9 @@ Default payload keeps only the minimum structured evidence layer:
 - `sources`
 - `claims`
 - `claim_evidence_edges`
+- `typed_conflicts` (required key; `[]` only when no conflict exists)
+- `candidate_causal_edges` (required key; `[]` only when no causal statement exists)
+- `causal_gaps` (required key; `[]` only when no mechanism gap exists)
 - `provenance_edges` when applicable
 - `contradictions` when applicable
 - `query_normalization`
@@ -98,6 +101,9 @@ Then you may:
   ],
   "provenance_edges": [],
   "contradictions": [],
+  "typed_conflicts": [],
+  "candidate_causal_edges": [],
+  "causal_gaps": [],
   "query_normalization": {
     "query_category": "technical_framework_selection",
     "topic_tags": ["software_tools", "engineering"]
@@ -253,6 +259,91 @@ Edge example (valid):
 - do not use a page title as snippet unless the title itself is decisive evidence
 - if a source is derivative and the parent source is identifiable, add `provenance_edges`
 - do not assign a high `support_score` to a snippet that does not directly ground the claim
+
+## Semantic Fields (typed_conflicts / candidate_causal_edges / causal_gaps)
+
+These three keys are REQUIRED in every feedback payload that carries claims. The backend hard-rejects (400) wrong enum values, so copy the allowed lists exactly. Empty arrays are allowed only when the checklist genuinely found nothing.
+
+### typed_conflicts
+
+Recorded when sources disagree on the same claim slot (a number, a date, a value, ...).
+
+- `claim_id` (required): the conflicting claim, e.g. `c1`
+- `slot_name` (required): one of `subject`, `action`, `time`, `location`, `number`, `version_or_policy_name`, `claim`
+- `conflict_type` (required): one of `value_conflict`, `temporal_conflict`, `logical_conflict`, `derivative_conflict`
+- `source_ids` (required, non-empty): canonical ids of the disagreeing sources, e.g. `["src_001", "src_003"]`
+- `conflicting_values` (required, non-empty): one reading per source, e.g. `["5.2%", "4.8%"]`
+- `severity` (optional, default `medium`): `low` | `medium` | `high`
+- `confidence` (optional, default `0.5`): 0.0-1.0
+- `recommended_action` (optional), `cluster_aware` (optional, default `true`)
+
+```json
+{
+  "typed_conflicts": [
+    {
+      "claim_id": "c1",
+      "slot_name": "number",
+      "conflict_type": "value_conflict",
+      "source_ids": ["src_001", "src_003"],
+      "conflicting_values": ["5.2%", "4.8%"],
+      "severity": "medium",
+      "confidence": 0.7
+    }
+  ]
+}
+```
+
+When a `typed_conflicts` entry exists, the conflicting source MUST also appear as at least one `claim_evidence_edge` with `stance: "oppose"`.
+
+### candidate_causal_edges
+
+Recorded when the research surfaces a causal statement ("X causes / leads to / results in Y"). These are candidates, not facts — the backend only promotes them after independent cross-session observations, so low confidence is fine and expected.
+
+- `from_claim_id` / `to_claim_id` (required): cause claim -> effect claim, both must exist in `claims`
+- `relation_type` (required): one of `caused`, `influenced`, `precedent_for`
+- `time_basis` (optional): when the causal link holds, e.g. `2026 flood season`
+- `mechanism_claim_ids` (optional): claim ids explaining the mechanism; `[]` when unknown
+- `supporting_source_ids` (optional): sources backing the link
+- `confidence` (optional, default `0.5`): 0.0-1.0
+
+```json
+{
+  "candidate_causal_edges": [
+    {
+      "from_claim_id": "c1",
+      "to_claim_id": "c2",
+      "relation_type": "caused",
+      "time_basis": "2026 flood season",
+      "mechanism_claim_ids": [],
+      "supporting_source_ids": ["src_001"],
+      "confidence": 0.5
+    }
+  ]
+}
+```
+
+### causal_gaps
+
+Recorded when a correlation is observed but the mechanism / time anchor / independent support is missing.
+
+- `from_claim_id` / `to_claim_id` (required): the correlated claims
+- `gap_type` (required): one of `missing_mechanism`, `missing_time_anchor`, `insufficient_independent_support`
+- `reason` (required): one sentence explaining what is missing
+- `supporting_source_ids` (optional)
+
+```json
+{
+  "causal_gaps": [
+    {
+      "from_claim_id": "c1",
+      "to_claim_id": "c2",
+      "gap_type": "missing_mechanism",
+      "reason": "Both sources report the correlation but neither explains the transmission channel.",
+      "supporting_source_ids": ["src_001"]
+    }
+  ]
+}
+```
 
 ## preference_blob Contract
 
