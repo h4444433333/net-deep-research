@@ -26,7 +26,8 @@
 | GitHub | main 对齐 1.1.5；最新 Release tag v1.1.4 | tag + Release 手动创建 |
 | ClawHub | 平台序列（下一版为 1.0.14） | 用户手动上传；版本号由平台序列决定 |
 | 虾评 XiaPing | 1.1.5 | skill_id `3f8e9263-…`；上传时显式传 `version` |
-| MCP | 随 PyPI 包 | 无独立版本号 |
+| MCP | 随 PyPI 包 | 无独立版本号（stdio 形态，`net-deep-research-mcp`） |
+| Smithery（smithery.ai） | 待收录 | MCP 目录站；新版发布表单要求公网 HTTPS MCP 端点，需先部署 Streamable HTTP 形态 |
 
 包内五处版本点（pyproject / `__init__` / `_meta.json` / SKILL.md / skill-card.md）
 仍保持一致，代表"包版本"；渠道版本是各平台自己的事。
