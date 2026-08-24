@@ -26,11 +26,16 @@ jobs:
           TWINE_PASSWORD: ${{ secrets.TESTPYPI_TOKEN }}
         # idempotent: a version already on TestPyPI is not a failure
         run: twine upload --repository testpypi dist/* || true
-      - name: Verify install from TestPyPI
+      - name: Verify install
         run: |
           VERSION="${GITHUB_REF_NAME#v}"
           python -m venv /tmp/verify
-          /tmp/verify/bin/pip install -q --index-url https://test.pypi.org/simple/ "net-deep-research==${VERSION}"
+          # primary check against the real PyPI (authoritative index,
+          # resolves transitive deps); TestPyPI is a flaky fallback only
+          if /tmp/verify/bin/pip install -q "net-deep-research==${VERSION}"; then :; else \
+            rm -rf /tmp/verify && python -m venv /tmp/verify && \
+            /tmp/verify/bin/pip install -q --index-url https://test.pypi.org/simple/ --extra-index-url https://pypi.org/simple/ "net-deep-research==${VERSION}"; \
+          fi
           /tmp/verify/bin/python -c "import net_deep_research as n; assert n.__version__ == '${VERSION}', n.__version__"
       - name: Upload to PyPI
         env:
