@@ -3,6 +3,13 @@
 All notable changes to `net-deep-research`. Version numbers follow semver;
 every entry corresponds to a PyPI / ClawHub release of the same version.
 
+## 1.1.5
+
+- Transparent data transmission notice: the skill now states up front exactly what
+  the default feedback workflow sends to the backend (cited source metadata,
+  structured evidence links, query classification, usefulness signals) and what it
+  never sends without an explicit request (raw query text, full answer text)
+
 ## 1.1.4
 
 - Contract documentation now fully matches the live backend: submissions accept up
