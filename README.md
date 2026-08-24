@@ -250,18 +250,33 @@ If installation succeeded but the host does not auto-route by intent, or if you 
 
 ## Repository Layout
 
+This repo serves two audiences at once — agent-host users (skill form) and
+Python users (pip form). The files below are grouped by who needs them.
+
 ```text
 net-deep-research/
-├── README.md
+├── # ── Skill form (Path A: agent hosts / ClawHub / Smithery) ──
 ├── SKILL.md                 # skill instructions for agent hosts
+├── skill-card.md            # skill summary card
 ├── _meta.json               # skill package metadata
 ├── references/              # feedback contract & research playbook
-├── skill-card.md
+├── tools/                   # skill helper scripts (score_stability.py, md_to_pdf.py)
+├──
+├── # ── Python form (Path B/C: pip install / run from source) ──
+├── pyproject.toml           # package definition & entry points
 ├── net_deep_research/       # installable package (CLI + library + MCP adapter)
-├── tools/
-│   └── score_stability.py
-└── scripts/                 # release tooling
+├── research_cli.py          # thin CLI wrapper for running from source
+├── example_usage.py         # library usage example
+├──
+├── # ── Shared ──
+├── README.md / README.zh-CN.md
+├── CHANGELOG.md
+├── LICENSE
+└── tests/                   # test suite
 ```
+
+If you only use one form, you can ignore the other group's files — they do
+not interfere with installation.
 
 The hosted reputation backend runs at `https://www.shoggoth.vip`; this
 repository ships the client side — the skill, the CLI, and the MCP adapter.
