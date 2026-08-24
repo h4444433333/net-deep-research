@@ -9,6 +9,8 @@ on:
 jobs:
   publish:
     runs-on: ubuntu-latest
+    permissions:
+      contents: write   # required for gh release create
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
