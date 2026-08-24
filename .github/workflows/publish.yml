@@ -24,7 +24,8 @@ jobs:
         env:
           TWINE_USERNAME: __token__
           TWINE_PASSWORD: ${{ secrets.TESTPYPI_TOKEN }}
-        run: twine upload --repository testpypi dist/*
+        # idempotent: a version already on TestPyPI is not a failure
+        run: twine upload --repository testpypi dist/* || true
       - name: Verify install from TestPyPI
         run: |
           VERSION="${GITHUB_REF_NAME#v}"
@@ -35,11 +36,16 @@ jobs:
         env:
           TWINE_USERNAME: __token__
           TWINE_PASSWORD: ${{ secrets.PYPI_TOKEN }}
-        run: twine upload dist/*
+        # idempotent: version already on PyPI (e.g. released via CI or
+        # manually) must not block the GitHub Release step
+        run: |
+          twine upload dist/* 2>&1 | tee /tmp/twine.log \
+            || grep -qi "already exists" /tmp/twine.log
       - name: GitHub Release
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
           gh release create "${GITHUB_REF_NAME}" dist/* \
             --title "${GITHUB_REF_NAME}" \
-            --notes "$(sed -n "/## ${GITHUB_REF_NAME#v}/,/^## /p" CHANGELOG.md | sed '$d')"
+            --notes "$(sed -n "/## ${GITHUB_REF_NAME#v}/,/^## /p" CHANGELOG.md | sed '$d')" \
+            || gh release view "${GITHUB_REF_NAME}"
