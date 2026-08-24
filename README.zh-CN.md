@@ -28,12 +28,12 @@
 - 容易被弱信源带偏的问题
 - 需要先过滤危险网站或可疑链接的联网研究场景
 
-安装入口：
+快速导航：
 
-- [ClawHub - Net Deep Research](https://clawhub.ai/h4444433333/skills/net-deep-research)（Agent 宿主的 skill bundle；[版本列表](https://clawhub.ai/h4444433333/skills/net-deep-research#versions)）
-- PyPI：`pip install net-deep-research`（命令行 + 库；装 MCP 服务加 `[mcp]`）
-- [GitHub - h4444433333/net-deep-research](https://github.com/h4444433333/net-deep-research)（源码直跑）
-- MCP 客户端：`pip install "net-deep-research[mcp]"` 后注册 `net-deep-research-mcp`（见[路径 D](#路径-dmcp-服务)）
+- [A. Skill 安装](#quickstart-skill)：装到 Trae、Claude Code、Cursor、Codex、OpenCode、OpenClaw 等 Agent 宿主
+- [B. pip 安装](#quickstart-pip)：安装命令行和 Python 库
+- [C. 源码直跑](#quickstart-source)：先看 requirements，再按 Python 本地环境快速启动
+- [D. MCP 服务](#quickstart-mcp)：接到 Claude Desktop、Qoder 等 MCP 客户端
 
 ### 为什么别人会试它
 
@@ -84,10 +84,12 @@
 |---|---|
 | **A. Skill 安装** | Agent 宿主（Trae、OpenCode、Claude Code、Codex、Cursor、OpenClaw） |
 | **B. pip 安装** | 终端用户与 Python 程序 |
-| **C. 源码直跑** | 在本仓库上开发、改造 |
+| **C. 源码直跑** | 本地开发、调试，或直接在 Python 环境快速启动 |
 | **D. MCP 服务** | 支持 MCP 的客户端（Claude Desktop、Qoder 等） |
 
 ### 1. 安装
+
+<a id="quickstart-skill"></a>
 
 #### 路径 A：Skill 安装（Agent 宿主）
 
@@ -109,6 +111,8 @@
 ```text
 我已经把这个 skill bundle 下载到本地目录 /absolute/path/to/net-deep-research。请从这个本地目录安装 SKILL.md 及相关文件到你当前宿主支持的 skill 目录中。如果你的宿主不支持从本地目录安装，请明确告诉我不支持，并给出你支持的安装方式。安装完成后告诉我安装位置，以及是否需要重启或刷新宿主。
 ```
+
+<a id="quickstart-pip"></a>
 
 #### 路径 B：pip 安装（命令行 / 库）
 
@@ -142,17 +146,40 @@ print(result["answer"])
 结论、逐条 claim 评级（A/B/C/U）、claim-证据链、冲突清单、因果候选，以及可供
 后端核验的引用护照。不加该参数时只输出答案文本。
 
+<a id="quickstart-source"></a>
+
 #### 路径 C：源码直跑（本仓库）
+
+先看 requirements：
+
+- Python >= 3.10
+- Git
+- 在 `.env` 中配置可用的 `LLM_API_KEY`
+- 建议使用本地虚拟环境
+
+如果你想用 Python 在本地环境里最快启动，直接这样跑：
 
 ```bash
 git clone https://github.com/h4444433333/net-deep-research.git
 cd net-deep-research
+python3 -m venv .venv
+source .venv/bin/activate
+python -m pip install -U pip
+pip install -e .
+cp .env.example .env                   # 然后填入 LLM_API_KEY
+python -m net_deep_research.cli "你的问题" [--report]
+```
+
+如果你不想做可编辑安装，也可以直接跑这个薄壳入口：
+
+```bash
 cp .env.example .env                   # 然后填入 LLM_API_KEY
 python3 research_cli.py "你的问题" [--report]
 ```
 
-`research_cli.py` 是转发到 `net_deep_research/cli.py:main` 的薄壳入口，
-无需任何打包步骤。
+`research_cli.py` 会转发到 `net_deep_research/cli.py:main`；`pip install -e .`
+只是让你在本地 Python 环境里用标准包入口启动。
+<a id="quickstart-mcp"></a>
 
 #### 路径 D：MCP 服务
 

@@ -22,12 +22,12 @@ Best fit:
 - questions where weak sources can ruin the answer
 - web research scenarios that should filter dangerous or suspicious URLs first
 
-Install from:
+Quick links:
 
-- [ClawHub - Net Deep Research](https://clawhub.ai/h4444433333/skills/net-deep-research) (skill bundle for agent hosts; [versions](https://clawhub.ai/h4444433333/skills/net-deep-research#versions))
-- PyPI: `pip install net-deep-research` (CLI + library; add `[mcp]` for the MCP server)
-- [GitHub - h4444433333/net-deep-research](https://github.com/h4444433333/net-deep-research) (run from source)
-- MCP clients: `pip install "net-deep-research[mcp]"` then register `net-deep-research-mcp` (see [Path D](#path-d-mcp-server))
+- [A. Skill install](#quickstart-skill): install into Trae, Claude Code, Cursor, Codex, OpenCode, or OpenClaw
+- [B. pip install](#quickstart-pip): install the CLI and Python library
+- [C. Run from source](#quickstart-source): check requirements first, then start quickly in a local Python environment
+- [D. MCP server](#quickstart-mcp): connect it to Claude Desktop, Qoder, or other MCP clients
 
 ### Why People Try It
 
@@ -78,10 +78,12 @@ Pick the path that matches how you want to use it:
 |---|---|
 | **A. Skill install** | Agent hosts (Trae, OpenCode, Claude Code, Codex, Cursor, OpenClaw) |
 | **B. pip install** | Terminal users and Python programs |
-| **C. Run from source** | Development and hacking on this repo |
+| **C. Run from source** | Local development or the fastest Python start from source |
 | **D. MCP server** | MCP-capable clients (Claude Desktop, Qoder, ...) |
 
 ### 1. Install
+
+<a id="quickstart-skill"></a>
 
 #### Path A: Skill install (agent hosts)
 
@@ -103,6 +105,8 @@ Prompt for local install:
 ```text
 I have already downloaded this skill bundle to /absolute/path/to/net-deep-research. Please install SKILL.md and its related files from that local directory into the skill directory supported by your current host. If your host does not support local-directory installation, say that clearly and tell me which installation method it does support. After installation, tell me the install path and whether the host needs a restart or reload.
 ```
+
+<a id="quickstart-pip"></a>
 
 #### Path B: pip install (CLI / library)
 
@@ -138,17 +142,41 @@ grades (A/B/C/U), the claim-evidence chain, typed conflicts, causal candidates,
 and the citation passport for backend verification. Without the flag only the
 answer text is produced.
 
+<a id="quickstart-source"></a>
+
 #### Path C: Run from source (this repo)
+
+Requirements first:
+
+- Python >= 3.10
+- Git
+- A valid `LLM_API_KEY` in `.env`
+- A local virtual environment is recommended
+
+If you want the fastest Python local start, run:
 
 ```bash
 git clone https://github.com/h4444433333/net-deep-research.git
 cd net-deep-research
+python3 -m venv .venv
+source .venv/bin/activate
+python -m pip install -U pip
+pip install -e .
+cp .env.example .env                   # then fill in LLM_API_KEY
+python -m net_deep_research.cli "your question" [--report]
+```
+
+If you prefer to skip the editable install, you can still run the thin wrapper directly:
+
+```bash
 cp .env.example .env                   # then fill in LLM_API_KEY
 python3 research_cli.py "your question" [--report]
 ```
 
 `research_cli.py` is a thin entry point that forwards to
-`net_deep_research/cli.py:main`; no packaging step is needed.
+`net_deep_research/cli.py:main`; `pip install -e .` just gives you the standard
+package entry point inside your local Python environment.
+<a id="quickstart-mcp"></a>
 
 #### Path D: MCP server
 
