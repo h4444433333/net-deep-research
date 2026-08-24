@@ -7,6 +7,8 @@
 [![ClawHub](<https://img.shields.io/badge/ClawHub-Net%20Deep%20Research-7c3aed>)](https://clawhub.ai/h4444433333/skills/net-deep-research)
 [![Versions](https://img.shields.io/badge/ClawHub-Versions-111827)](https://clawhub.ai/h4444433333/skills/net-deep-research#versions)
 
+[English](./README.md) | **简体中文**
+
 ## 给 AI 智能体的可信研究技能：不是多搜一点，而是更不容易被假数据带偏
 
 `Net Deep Research` 是一个公开的可信研究 skill bundle，面向那些需要先联网核验信息、识别弱信源或假数据、再按证据给出更可靠结论的 AI 智能体。它不是为了“多搜一点”，而是为了减少被单一网页、伪权威表述或未经核验的数据带偏的概率。

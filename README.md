@@ -7,6 +7,8 @@
 [![ClawHub](<https://img.shields.io/badge/ClawHub-Net%20Deep%20Research-7c3aed>)](https://clawhub.ai/h4444433333/skills/net-deep-research)
 [![Versions](https://img.shields.io/badge/ClawHub-Versions-111827)](https://clawhub.ai/h4444433333/skills/net-deep-research#versions)
 
+**English** | [简体中文](./README.zh-CN.md)
+
 ## A Trustworthy Research Skill For AI Agents That Need More Reliable Answers, Not Just More Search.
 
 `Net Deep Research` is a public skill bundle for AI agents that need to verify information on the live web, detect weak or misleading sources, and produce more reliable answers from evidence. It is not built to "search deeper" for its own sake. It is built to reduce the chance of being led astray by a single page, fake data, or unverified claims.
