@@ -116,12 +116,34 @@ I have already downloaded this skill bundle to /absolute/path/to/net-deep-resear
 pip install net-deep-research          # Python >= 3.10, zero third-party dependencies
 ```
 
-Configure via a `.env` file in your working directory or via environment variables
-(see `.env.example` in this repo); `LLM_API_KEY` is the only required value:
+Configure it with a local `.env` file (recommended) or with exported environment
+variables. See `.env.example` in this repo. `LLM_API_KEY` is required, and for
+non-default OpenAI-compatible providers you should also set `LLM_BASE_URL` and
+`LLM_MODEL` explicitly:
 
 ```bash
-cp .env.example .env                   # then fill in LLM_API_KEY
+cp .env.example .env                   # keep this file local, then fill in your real values
 ```
+
+Recommended local `.env`:
+
+```env
+LLM_API_KEY=your_api_key
+LLM_BASE_URL=https://api.deepseek.com
+LLM_MODEL=deepseek-chat
+```
+
+How config is loaded for `net-deep-research "your question"`:
+
+- keep `.env` on your local machine; do not commit it
+- for normal use, put `.env` in the directory where you run the command
+- existing shell environment variables win over `.env`
+- the CLI auto-loads the first `.env` it finds in this order:
+  1. package directory `net_deep_research/.env`
+  2. current working directory `.env`
+
+So yes: if you copied `.env.example` to a local `.env` and filled in the
+provider values, the command will use it normally.
 
 Two usage forms:
 
@@ -164,14 +186,14 @@ python3 -m venv .venv
 source .venv/bin/activate
 python -m pip install -U pip
 pip install -e .
-cp .env.example .env                   # then fill in LLM_API_KEY
+cp .env.example .env                   # keep it local; fill in LLM_API_KEY / LLM_BASE_URL / LLM_MODEL
 python -m net_deep_research.cli "your question" [--report]
 ```
 
 If you prefer to skip the editable install, you can still run the thin wrapper directly:
 
 ```bash
-cp .env.example .env                   # then fill in LLM_API_KEY
+cp .env.example .env                   # keep it local; fill in LLM_API_KEY / LLM_BASE_URL / LLM_MODEL
 python3 research_cli.py "your question" [--report]
 ```
 

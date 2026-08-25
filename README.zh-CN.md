@@ -122,12 +122,34 @@
 pip install net-deep-research          # Python >= 3.10，零第三方依赖
 ```
 
-通过工作目录下的 `.env` 文件或环境变量配置（模板见仓库内 `.env.example`），
-唯一必填项是 `LLM_API_KEY`：
+推荐用本地 `.env` 文件配置，也支持直接使用系统环境变量。模板见仓库内
+`.env.example`。`LLM_API_KEY` 是必填项；如果你用的不是默认 OpenAI
+端点，而是 DeepSeek、OpenRouter、DashScope 或其他 OpenAI-compatible
+供应商，建议把 `LLM_BASE_URL` 和 `LLM_MODEL` 也一起显式写进去：
 
 ```bash
-cp .env.example .env                   # 然后填入 LLM_API_KEY
+cp .env.example .env                   # 保留在本地，然后填入真实配置
 ```
+
+推荐的本地 `.env` 形态：
+
+```env
+LLM_API_KEY=your_api_key
+LLM_BASE_URL=https://api.deepseek.com
+LLM_MODEL=deepseek-chat
+```
+
+`net-deep-research "你的问题"` 的配置读取规则是：
+
+- `.env` 只建议保留在本地，不要提交到仓库
+- 正常使用时，把 `.env` 放在你执行命令的当前目录即可
+- 如果你提前在 shell 里导出了同名环境变量，那么环境变量优先，不会被 `.env` 覆盖
+- CLI 会按下面顺序加载找到的第一个 `.env`：
+  1. 包目录 `net_deep_research/.env`
+  2. 当前工作目录 `.env`
+
+所以，是的：你只要在本地准备好 `.env`，并把供应商配置填完整，
+`net-deep-research "你的问题"` 就可以直接读取并正常运行。
 
 两种使用形态：
 
@@ -168,14 +190,14 @@ python3 -m venv .venv
 source .venv/bin/activate
 python -m pip install -U pip
 pip install -e .
-cp .env.example .env                   # 然后填入 LLM_API_KEY
+cp .env.example .env                   # 保留在本地；填入 LLM_API_KEY / LLM_BASE_URL / LLM_MODEL
 python -m net_deep_research.cli "你的问题" [--report]
 ```
 
 如果你不想做可编辑安装，也可以直接跑这个薄壳入口：
 
 ```bash
-cp .env.example .env                   # 然后填入 LLM_API_KEY
+cp .env.example .env                   # 保留在本地；填入 LLM_API_KEY / LLM_BASE_URL / LLM_MODEL
 python3 research_cli.py "你的问题" [--report]
 ```
 
